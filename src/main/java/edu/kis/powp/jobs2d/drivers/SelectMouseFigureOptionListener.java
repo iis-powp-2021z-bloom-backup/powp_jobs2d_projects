@@ -13,6 +13,7 @@ public class SelectMouseFigureOptionListener implements ActionListener {
     private Integer previousHeadXPosition;
     private Integer previousHeadYPosition;
 
+    private boolean firstClick = true;
 
     public SelectMouseFigureOptionListener(JPanel drawPanel, DriverManager driverManager) {
         this.drawPanel = drawPanel;
@@ -28,12 +29,20 @@ public class SelectMouseFigureOptionListener implements ActionListener {
         this.drawPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (firstClick) {
+                    firstClick = false;
+                    updatePreviousMousePosition(e, halfWindowWidth, halfWindowHeight);
+                }
+
                 if (previousHeadXPosition == null || previousHeadYPosition == null) {
                     updatePreviousMousePosition(e, halfWindowWidth, halfWindowHeight);
                 }
 
                 driverManager.getCurrentDriver().setPosition(previousHeadXPosition, previousHeadYPosition);
-                driverManager.getCurrentDriver().operateTo(e.getX() - halfWindowWidth, e.getY() - halfWindowHeight);
+
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    driverManager.getCurrentDriver().operateTo(e.getX() - halfWindowWidth, e.getY() - halfWindowHeight);
+                }
 
                 updatePreviousMousePosition(e, halfWindowWidth, halfWindowHeight);
             }
