@@ -10,6 +10,8 @@ import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver;
+import edu.kis.powp.jobs2d.command.gui.DeviceUsageCalculatorWindow;
+import edu.kis.powp.jobs2d.command.gui.DeviceUsageCalculatorWindowDistanceChangeObserver;
 import edu.kis.powp.jobs2d.drivers.proxy.DeviceUsageProxy;
 import edu.kis.powp.jobs2d.drivers.SelectMouseFigureOptionListener;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
@@ -18,6 +20,7 @@ import edu.kis.powp.jobs2d.events.SelectRunCurrentCommandOptionListener;
 import edu.kis.powp.jobs2d.events.SelectTestFigure2OptionListener;
 import edu.kis.powp.jobs2d.events.SelectTestFigureOptionListener;
 import edu.kis.powp.jobs2d.features.CommandsFeature;
+import edu.kis.powp.jobs2d.features.DeviceUsageFeature;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
 
@@ -62,12 +65,16 @@ public class TestJobs2dApp {
 		DriverFeature.addDriver("Logger driver", loggerDriver);
 
 		DrawPanelController drawerController = DrawerFeature.getDrawerController();
-		Job2dDriver driver = new DeviceUsageProxy(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
+		Job2dDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
 		DriverFeature.addDriver("Line Simulator", driver);
 		DriverFeature.getDriverManager().setCurrentDriver(driver);
 
-		driver = new DeviceUsageProxy(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
+		driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
 		DriverFeature.addDriver("Special line Simulator", driver);
+		DriverFeature.updateDriverInfo();
+
+		driver = new DeviceUsageProxy(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"), DeviceUsageFeature.getDeviceUsageManager());
+		DriverFeature.addDriver("Line Simulator with Device Usage", driver);
 		DriverFeature.updateDriverInfo();
 	}
 
@@ -79,6 +86,13 @@ public class TestJobs2dApp {
 		CommandManagerWindowCommandChangeObserver windowObserver = new CommandManagerWindowCommandChangeObserver(
 				commandManager);
 		CommandsFeature.getDriverCommandManager().getChangePublisher().addSubscriber(windowObserver);
+
+		DeviceUsageCalculatorWindow deviceUsageCalculatorWindow = new DeviceUsageCalculatorWindow(DeviceUsageFeature.getDeviceUsageManager());
+		application.addWindowComponent("Device Usage Manager", deviceUsageCalculatorWindow);
+
+		DeviceUsageCalculatorWindowDistanceChangeObserver deviceUsageWindowObserver =
+				new DeviceUsageCalculatorWindowDistanceChangeObserver(deviceUsageCalculatorWindow);
+		DeviceUsageFeature.getDeviceUsageManager().getPublisher().addSubscriber(deviceUsageWindowObserver);
 	}
 
 	/**
@@ -109,6 +123,7 @@ public class TestJobs2dApp {
 				Application app = new Application("Jobs 2D");
 				DrawerFeature.setupDrawerPlugin(app,app.getFreePanel());
 				CommandsFeature.setupCommandManager();
+				DeviceUsageFeature.setupDeviceUsageManager();
 
 				DriverFeature.setupDriverPlugin(app);
 				setupDrivers(app);
