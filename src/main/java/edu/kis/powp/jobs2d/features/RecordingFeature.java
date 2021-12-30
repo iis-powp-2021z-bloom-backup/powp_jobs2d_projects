@@ -20,8 +20,6 @@ public class RecordingFeature {
 	public static final String RECORDING = "Recording";
 	public static final String CLEAR_MACRO = "Clear Macro";
 	public static final String RUN_MACRO = "Run Macro";
-	public static final String ABOUT = "About :)";
-	public static final String ABOUT_MSG = "Authors: Pawel Wozniak and Mateusz Janiak";
 
 	private RecordingFeature() {}
 
@@ -33,7 +31,6 @@ public class RecordingFeature {
 		app.addComponentMenuElementWithCheckBox(RecordingFeature.class, RECORDING, listener, isRecording);
 		app.addComponentMenuElement(RecordingFeature.class, CLEAR_MACRO, listener);
 		app.addComponentMenuElement(RecordingFeature.class, RUN_MACRO, listener);
-		app.addComponentMenuElement(RecordingFeature.class, ABOUT, listener);
 
 		DriverFeature.getDriverManager().addSubscriber(driver);
 		checkbox = Arrays.stream(app.getFreePanel().getRootPane().getJMenuBar().getSubElements())
