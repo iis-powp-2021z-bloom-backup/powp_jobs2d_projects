@@ -16,7 +16,7 @@ public class Job2dDriverTest {
 	 * Driver test.
 	 */
 	public static void main(String[] args) {
-		FiguresJoe.figureScript1(driver.getDriver(0));
+		FiguresJoe.figureScript1(driver);
 	}
 
 	private static class StubDriver implements Job2dDriver {

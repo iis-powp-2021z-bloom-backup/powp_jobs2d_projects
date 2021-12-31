@@ -69,6 +69,10 @@ public class TestJobs2dApp {
 
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
 		DriverFeature.addDriver("Special line Simulator", driverComposite.getDriver(2));
+
+		DriverFeature.addDriver("Driver composite", driverComposite);
+
+
 		DriverFeature.updateDriverInfo();
 	}
 
