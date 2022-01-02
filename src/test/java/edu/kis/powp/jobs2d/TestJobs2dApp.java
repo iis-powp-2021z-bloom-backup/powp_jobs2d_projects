@@ -59,17 +59,21 @@ public class TestJobs2dApp {
 	 */
 	private static void setupDrivers(Application application) {
 		DriverComposite driverComposite = new DriverComposite();
-		driverComposite.add(new LoggerDriver());
-		DriverFeature.addDriver("Logger driver", driverComposite.getDriver(0));
+
+		Job2dDriver loggerDriver = new LoggerDriver();
+		DriverFeature.addDriver("Logger driver", loggerDriver);
 
 		DrawPanelController drawerController = DrawerFeature.getDrawerController();
+		Job2dDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
+		DriverFeature.addDriver("Line Simulator", driver);
+		DriverFeature.getDriverManager().setCurrentDriver(driver);
+
+		driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
+		DriverFeature.addDriver("Special line Simulator", driver);
+
+		driverComposite.add(new LoggerDriver());
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
-		DriverFeature.addDriver("Line Simulator", driverComposite.getDriver(1));
-		DriverFeature.getDriverManager().setCurrentDriver(driverComposite.getDriver(1));
-
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
-		DriverFeature.addDriver("Special line Simulator", driverComposite.getDriver(2));
-
 		DriverFeature.addDriver("Driver composite", driverComposite);
 
 
