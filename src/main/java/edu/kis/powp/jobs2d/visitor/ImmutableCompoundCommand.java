@@ -26,6 +26,22 @@ public class ImmutableCompoundCommand implements ICompoundCommand {
         commands.iterator().forEachRemaining(command -> this.commandsList.add((DriverCommand) command.clone()));
     }
 
+    @Override
+    public ImmutableCompoundCommand clone() {
+        ImmutableCompoundCommand command;
+        try {
+            command = (ImmutableCompoundCommand) super.clone();
+            command.name = this.name;
+            command.commandsList = new ArrayList<>();
+            for (DriverCommand cmd : this.commandsList) {
+                command.commandsList.add((DriverCommand) cmd.clone());
+            }
+        } catch (CloneNotSupportedException e) {
+            command = new ImmutableCompoundCommand(this, this.name);
+        }
+        return command;
+    }
+
     public ImmutableCompoundCommand(ICompoundCommand other, String name) {
         super();
         this.name = name;
@@ -37,4 +53,9 @@ public class ImmutableCompoundCommand implements ICompoundCommand {
     public void execute(Job2dDriver driver) {
         this.iterator().forEachRemaining(command -> execute(driver));
     }
+
+   // @Override
+   // public Object clone() {
+   //     return null;
+   // }
 }
