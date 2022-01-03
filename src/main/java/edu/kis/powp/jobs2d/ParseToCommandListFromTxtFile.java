@@ -1,12 +1,13 @@
 package edu.kis.powp.jobs2d;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import edu.kis.powp.jobs2d.command.DriverCommand;
+import edu.kis.powp.jobs2d.command.InterfaceAdapter;
 import edu.kis.powp.jobs2d.command.OperateToCommand;
 import edu.kis.powp.jobs2d.command.SetPositionCommand;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,11 +21,39 @@ public class ParseToCommandListFromTxtFile {
     public ParseToCommandListFromTxtFile(File file) {
         this.file = file;
         this.commandList = new ArrayList<>();
-
-        //TODO add verification of file type and implement solution for at least 1-2 more filetypes (JSON, csv)
     }
 
     public void fillListFromFile() throws Exception {
+        String name = this.file.getName();
+        String type = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
+
+        switch (type) {
+            case "txt":
+                populateCommandListFromTxt();
+                break;
+            case "json":
+                populateCommandListFromJson();
+                System.out.println("json");
+                break;
+            default:
+                throw new Exception("Invalid file type");
+        }
+    }
+
+    public List<DriverCommand> getCommandList() {
+        return commandList;
+    }
+
+    /**
+     * txt file in format:
+     * Z XX YY
+     * Z XX YY
+     * where:
+     * Z - 's' for setPosition or 'o' for operateTo
+     * XX - x coordinate (int)
+     * YY - y coordinate (int)
+     **/
+    private void populateCommandListFromTxt() throws IOException {
         BufferedReader reader;
         reader = new BufferedReader(new FileReader(this.file));
 
@@ -39,11 +68,34 @@ public class ParseToCommandListFromTxtFile {
             }
             line = reader.readLine();
         }
-        //TODO if list is empty do something maybe
         reader.close();
     }
 
-    public List<DriverCommand> getCommandList() {
-        return commandList;
+    /***
+     * JSON example utilizing SetPositionCommand and OperateToCommand commands
+     *
+     * [{"CLASSNAME": "SetPositionCommand",
+     *     "DATA": {
+     *       "posX": 100,
+     *       "posY": 100
+     * }},
+     * {"CLASSNAME": "OperateToCommand",
+     *     "DATA": {
+     *       "posX": 200,
+     *       "posY": 200
+     * }}]
+     *
+     ***/
+    private void populateCommandListFromJson() throws FileNotFoundException {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(DriverCommand.class, new InterfaceAdapter());
+        Gson gson = builder.create();
+
+        BufferedReader reader;
+        reader = new BufferedReader(new FileReader(this.file));
+//        String carsJsonFormat = gson.toJson(dc, DriverCommand[].class);
+        DriverCommand[] returnedOnes = gson.fromJson(reader, DriverCommand[].class);
+        this.commandList = Arrays.asList(returnedOnes);
     }
+
 }

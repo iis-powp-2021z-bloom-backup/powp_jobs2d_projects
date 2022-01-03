@@ -62,7 +62,6 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
         c.weighty = 1;
         content.add(btnClearCommand, c);
 
-        //new button
         JButton bntGiveCommand = new JButton("Give command");
         bntGiveCommand.addActionListener((ActionEvent e) -> this.giveCommand());
         c.fill = GridBagConstraints.BOTH;
@@ -103,7 +102,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
             e.printStackTrace();
         }
         List<DriverCommand> newCommand2 = fileOperator.getCommandList();
-        commandManager.setCurrentCommand(newCommand2, "test subject");
+        commandManager.setCurrentCommand(newCommand2, "Command taken from file: " + file.getName());
         updateCurrentCommandField();
     }
 
