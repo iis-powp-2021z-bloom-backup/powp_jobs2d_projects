@@ -85,7 +85,6 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		updateCurrentCommandField();
 	}
 
-	//TODO general reformat and cleanup
 	private void giveCommand() {
 		final JFileChooser fc = new JFileChooser();
 		List<DriverCommand> newCommands = new ArrayList<>();
