@@ -1,15 +1,16 @@
 package edu.kis.powp.jobs2d.command.gui;
 
 import edu.kis.powp.appbase.gui.WindowComponent;
-import edu.kis.powp.jobs2d.ParseToCommandListFromTxtFile;
 import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.manager.DriverCommandManager;
+import edu.kis.powp.jobs2d.features.CommandParser;
 import edu.kis.powp.observer.Subscriber;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommandManagerWindow extends JFrame implements WindowComponent {
@@ -84,25 +85,26 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		updateCurrentCommandField();
 	}
 
-	//new command
 	//TODO general reformat and cleanup
 	private void giveCommand() {
-		File file = null;
 		final JFileChooser fc = new JFileChooser();
+		List<DriverCommand> newCommands = new ArrayList<>();
+		String commandMessage = "No file was chosen";
+
 		int returnVal = fc.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			file = fc.getSelectedFile();
-		} else {
-			//TODO some kind of error
+			File file = fc.getSelectedFile();
+			CommandParser commandParser = new CommandParser(file);
+			try {
+				commandParser.fillListFromFile();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			newCommands = commandParser.getCommandList();
+			commandMessage = "Command taken from file: " + file.getName();
 		}
-		ParseToCommandListFromTxtFile fileOperator = new ParseToCommandListFromTxtFile(file);
-		try {
-			fileOperator.fillListFromFile();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		List<DriverCommand> newCommand2 = fileOperator.getCommandList();
-		commandManager.setCurrentCommand(newCommand2, "Command taken from file: " + file.getName());
+		commandManager.setCurrentCommand(newCommands, commandMessage);
+
 		updateCurrentCommandField();
 	}
 

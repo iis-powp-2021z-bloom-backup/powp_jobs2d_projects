@@ -1,39 +1,36 @@
-package edu.kis.powp.jobs2d;
+package edu.kis.powp.jobs2d.features;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import edu.kis.powp.jobs2d.command.DriverCommand;
-import edu.kis.powp.jobs2d.command.InterfaceAdapter;
 import edu.kis.powp.jobs2d.command.OperateToCommand;
 import edu.kis.powp.jobs2d.command.SetPositionCommand;
+import edu.kis.powp.jobs2d.drivers.adapter.JsonAdapter;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ParseToCommandListFromTxtFile {
+public class CommandParser {
     private File file;
     private List<DriverCommand> commandList;
 
-    //TODO figure out how to change class ane methods names and where to put the class
-
-    public ParseToCommandListFromTxtFile(File file) {
+    public CommandParser(File file) {
         this.file = file;
         this.commandList = new ArrayList<>();
     }
 
     public void fillListFromFile() throws Exception {
-        String name = this.file.getName();
-        String type = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
+        String fileName = this.file.getName();
+        String fileType = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
 
-        switch (type) {
+        switch (fileType) {
             case "txt":
                 populateCommandListFromTxt();
                 break;
             case "json":
                 populateCommandListFromJson();
-                System.out.println("json");
                 break;
             default:
                 throw new Exception("Invalid file type");
@@ -88,14 +85,13 @@ public class ParseToCommandListFromTxtFile {
      ***/
     private void populateCommandListFromJson() throws FileNotFoundException {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(DriverCommand.class, new InterfaceAdapter());
+        builder.registerTypeAdapter(DriverCommand.class, new JsonAdapter());
         Gson gson = builder.create();
 
         BufferedReader reader;
         reader = new BufferedReader(new FileReader(this.file));
-//        String carsJsonFormat = gson.toJson(dc, DriverCommand[].class);
-        DriverCommand[] returnedOnes = gson.fromJson(reader, DriverCommand[].class);
-        this.commandList = Arrays.asList(returnedOnes);
+        DriverCommand[] commands = gson.fromJson(reader, DriverCommand[].class);
+        this.commandList = Arrays.asList(commands);
     }
 
 }
