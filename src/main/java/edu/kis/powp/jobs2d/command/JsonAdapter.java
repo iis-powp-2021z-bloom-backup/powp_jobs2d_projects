@@ -1,4 +1,4 @@
-package edu.kis.powp.jobs2d.drivers.adapter;
+package edu.kis.powp.jobs2d.command;
 
 import com.google.gson.*;
 

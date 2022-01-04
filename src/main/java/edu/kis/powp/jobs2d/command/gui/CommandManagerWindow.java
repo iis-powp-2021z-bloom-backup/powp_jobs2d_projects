@@ -3,7 +3,7 @@ package edu.kis.powp.jobs2d.command.gui;
 import edu.kis.powp.appbase.gui.WindowComponent;
 import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.manager.DriverCommandManager;
-import edu.kis.powp.jobs2d.features.CommandParser;
+import edu.kis.powp.jobs2d.command.CommandReader;
 import edu.kis.powp.observer.Subscriber;
 
 import javax.swing.*;
@@ -93,7 +93,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		int returnVal = fc.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
-			CommandParser commandParser = new CommandParser(file);
+			CommandReader commandParser = new CommandReader(file);
 			try {
 				commandParser.fillListFromFile();
 			} catch (Exception e) {
