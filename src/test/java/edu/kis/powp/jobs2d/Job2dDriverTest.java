@@ -1,6 +1,7 @@
 package edu.kis.powp.jobs2d;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
+import edu.kis.powp.jobs2d.drivers.composite.DriverComposite;
 import edu.kis.powp.jobs2d.magicpresets.FiguresJoe;
 
 /**
@@ -9,7 +10,7 @@ import edu.kis.powp.jobs2d.magicpresets.FiguresJoe;
  * @author Dominik
  */
 public class Job2dDriverTest {
-	private static Job2dDriver driver = new StubDriver();
+	private static DriverComposite driver = new DriverComposite(new StubDriver());
 
 	/**
 	 * Driver test.
