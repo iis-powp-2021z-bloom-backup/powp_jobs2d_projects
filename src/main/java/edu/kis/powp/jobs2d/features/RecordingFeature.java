@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class RecordingFeature {
-	private static Application app;
 	private static boolean isRecording = false;
 	private static final RecordingDriverDecorator driver =
 			new RecordingDriverDecorator(DriverFeature.getDriverManager().getCurrentDriver());
@@ -23,8 +22,7 @@ public class RecordingFeature {
 
 	private RecordingFeature() {}
 
-	public static void setupRecordingPlugin(Application application) {
-		app = application;
+	public static void setupRecordingPlugin(Application app) {
 		ActionListener listener = new SelectRecordMacroMenuOptionListener();
 
 		app.addComponentMenu(RecordingFeature.class, RECORD_MACRO);
@@ -32,7 +30,8 @@ public class RecordingFeature {
 		app.addComponentMenuElement(RecordingFeature.class, CLEAR_MACRO, listener);
 		app.addComponentMenuElement(RecordingFeature.class, RUN_MACRO, listener);
 
-		DriverFeature.getDriverManager().addSubscriber(driver);
+		//Waiting for implementation of Observer pattern in DriverFeature
+		//DriverFeature.getDriverManager().addSubscriber(driver);
 		checkbox = Arrays.stream(app.getFreePanel().getRootPane().getJMenuBar().getSubElements())
 				.flatMap(x -> Arrays.stream(x.getSubElements()))
 				.flatMap(x -> Arrays.stream(x.getSubElements()))
