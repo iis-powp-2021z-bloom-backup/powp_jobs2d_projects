@@ -1,7 +1,12 @@
 package edu.kis.powp.jobs2d.command;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class CommandReader {
 	private File file;
@@ -15,14 +20,13 @@ public class CommandReader {
 	public void fillListFromFile() throws Exception {
 		final String TXT = "txt";
 		final String JSON = "json";
-		final String EOF = "\\z";
 
 		String fileName = this.file.getName();
 		String fileType = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-		Scanner scanner = new Scanner(file);
-		scanner.useDelimiter(EOF);
-		String fileContent = scanner.next();
-		scanner.close();
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String fileContent =  br.lines().collect(Collectors.joining(System.lineSeparator()));
+        br.close();
+        System.out.println(fileContent);
 
 		CommandParser parser;
 
