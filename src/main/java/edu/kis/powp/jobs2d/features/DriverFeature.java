@@ -42,12 +42,12 @@ public class DriverFeature {
 	 * Update driver info.
 	 */
 	public static void updateDriverInfo() {
-		app.updateInfo(driverNameLabelChangeManager.getCurrentDriverString());
+		driverNameLabelChangeManager.setCurrentDriver(driverManager.getCurrentDriver());
 	}
 
 	public static void setUpDriverNameLabelChangeManager(){
 		driverNameLabelChangeManager = new DriverNameLabelChangeManager();
-		DriverNameLabelChangeObserver driverNameLabelChangeObserver = new DriverNameLabelChangeObserver(driverManager, driverNameLabelChangeManager);
+		DriverNameLabelChangeObserver driverNameLabelChangeObserver = new DriverNameLabelChangeObserver(driverNameLabelChangeManager, app);
 		driverNameLabelChangeManager.getChangePublisher().addSubscriber(driverNameLabelChangeObserver);
 	}
 }

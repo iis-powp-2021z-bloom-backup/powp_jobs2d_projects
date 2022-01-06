@@ -1,10 +1,12 @@
 package edu.kis.powp.jobs2d.drivers.label;
 
+import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.observer.Publisher;
 
 public class DriverNameLabelChangeManager {
     private Job2dDriver job2dDriver;
+    private Application app;
     private final Publisher changePublisher = new Publisher();
 
     public synchronized void setCurrentDriver(Job2dDriver job2dDriver){
