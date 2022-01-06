@@ -4,10 +4,13 @@ import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.drivers.SelectDriverMenuOptionListener;
+import edu.kis.powp.jobs2d.drivers.label.DriverNameLabelChangeManager;
+import edu.kis.powp.jobs2d.drivers.label.DriverNameLabelChangeObserver;
 
 public class DriverFeature {
 
 	private static DriverManager driverManager = new DriverManager();
+	private static DriverNameLabelChangeManager driverNameLabelChangeManager;
 	private static Application app;
 
 	public static DriverManager getDriverManager() {
@@ -39,7 +42,12 @@ public class DriverFeature {
 	 * Update driver info.
 	 */
 	public static void updateDriverInfo() {
-		app.updateInfo(driverManager.getCurrentDriver().toString());
+		app.updateInfo(driverNameLabelChangeManager.getCurrentDriverString());
 	}
 
+	public static void setUpDriverNameLabelChangeManager(){
+		driverNameLabelChangeManager = new DriverNameLabelChangeManager();
+		DriverNameLabelChangeObserver driverNameLabelChangeObserver = new DriverNameLabelChangeObserver(driverManager, driverNameLabelChangeManager);
+		driverNameLabelChangeManager.getChangePublisher().addSubscriber(driverNameLabelChangeObserver);
+	}
 }
