@@ -42,11 +42,7 @@ class DataTest implements ICompoundCommand
     public Iterator<DriverCommand> iterator() {
         return list.iterator();
     }
-
-    @Override
-    public void accept(VisitorCommand visitor) {
-        ICompoundCommand.super.accept(visitor);
-    }
+    
 }
 
 public class SelectICompoundCommandVisitorCounterListener implements ActionListener
