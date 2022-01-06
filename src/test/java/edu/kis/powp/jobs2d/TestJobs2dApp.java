@@ -66,6 +66,7 @@ public class TestJobs2dApp {
 		driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
 		DriverFeature.addDriver("Special line Simulator", driver);
 		DriverFeature.updateDriverInfo();
+
 	}
 
 	private static void setupWindows(Application application) {
@@ -106,8 +107,8 @@ public class TestJobs2dApp {
 				Application app = new Application("Jobs 2D");
 				DrawerFeature.setupDrawerPlugin(app);
 				CommandsFeature.setupCommandManager();
-
 				DriverFeature.setupDriverPlugin(app);
+				DriverFeature.setUpDriverNameLabelChangeManager();
 				setupDrivers(app);
 				setupPresetTests(app);
 				setupCommandTests(app);
