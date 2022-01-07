@@ -1,16 +1,15 @@
 package edu.kis.powp.jobs2d.command.gui;
 
 import edu.kis.powp.appbase.gui.WindowComponent;
+import edu.kis.powp.jobs2d.command.CommandReader;
 import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.manager.DriverCommandManager;
-import edu.kis.powp.jobs2d.command.CommandReader;
 import edu.kis.powp.observer.Subscriber;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CommandManagerWindow extends JFrame implements WindowComponent {
@@ -87,8 +86,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
 	private void giveCommand() {
 		final JFileChooser fc = new JFileChooser();
-		List<DriverCommand> newCommands = new ArrayList<>();
-		String commandMessage = "No file was chosen";
+		DriverCommand newCommands = null;
 
 		int returnVal = fc.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -100,10 +98,8 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 				e.printStackTrace();
 			}
 			newCommands = commandParser.getCommandList();
-			commandMessage = "Command taken from file: " + file.getName();
 		}
-		commandManager.setCurrentCommand(newCommands, commandMessage);
-
+		commandManager.setCurrentCommand(newCommands);
 		updateCurrentCommandField();
 	}
 

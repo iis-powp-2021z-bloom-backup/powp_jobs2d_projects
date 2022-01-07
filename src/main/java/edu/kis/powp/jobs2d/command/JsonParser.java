@@ -3,9 +3,7 @@ package edu.kis.powp.jobs2d.command;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /***
  * JSON example utilizing SetPositionCommand and OperateToCommand commands
@@ -24,28 +22,20 @@ import java.util.List;
  ***/
 public class JsonParser implements CommandParser {
 
-	private String fileContent;
-	private List<DriverCommand> commandList;
-
-	public JsonParser(String fileContent) {
-		this.fileContent = fileContent;
-		this.commandList = new ArrayList<>();
-	}
+	private DriverCommand parsedCommand;
 
 	@Override
-	public void fillListFromFile() {
-
-
+	public void parse(String commandsInput) {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(DriverCommand.class, new JsonAdapter());
 		Gson gson = builder.create();
 
-		DriverCommand[] commands = gson.fromJson(fileContent, DriverCommand[].class);
-		this.commandList = Arrays.asList(commands);
+		DriverCommand[] commands = gson.fromJson(commandsInput, DriverCommand[].class);
+		this.parsedCommand = new CompoundCommand(Arrays.asList(commands), "Json file command");
 	}
 
 	@Override
-	public List<DriverCommand> getCommandList() {
-		return commandList;
+	public DriverCommand getParsedCommand() {
+		return parsedCommand;
 	}
 }

@@ -16,32 +16,27 @@ import java.util.Scanner;
  **/
 public class TxtParser implements CommandParser {
 
-	private String fileContent;
-	private List<DriverCommand> commandList;
+	private DriverCommand parsedCommand;
 
-	public TxtParser(String fileContent) {
-		this.fileContent = fileContent;
-		this.commandList = new ArrayList<>();
-	}
-
-	public void fillListFromFile() {
+	public void parse(String commandsInput) {
+		List<DriverCommand> TEMP = new ArrayList<>();
 		String line;
-		Scanner scanner = new Scanner(fileContent);
+		Scanner scanner = new Scanner(commandsInput);
 		while (scanner.hasNextLine()) {
 			line = scanner.nextLine();
 			List<String> lineList = Arrays.asList(line.toLowerCase().split(" "));
 			if (lineList.get(0).equals("s")) {
-				commandList.add(new SetPositionCommand(Integer.parseInt(lineList.get(1)), Integer.parseInt(lineList.get(2))));
+				TEMP.add(new SetPositionCommand(Integer.parseInt(lineList.get(1)), Integer.parseInt(lineList.get(2))));
 			} else if (lineList.get(0).equals("o")) {
-				commandList.add(new OperateToCommand(Integer.parseInt(lineList.get(1)), Integer.parseInt(lineList.get(2))));
+				TEMP.add(new OperateToCommand(Integer.parseInt(lineList.get(1)), Integer.parseInt(lineList.get(2))));
 			}
 		}
 		scanner.close();
+		parsedCommand = new CompoundCommand(TEMP, "Txt file command");
 	}
 
 	@Override
-	public List<DriverCommand> getCommandList() {
-		return commandList;
+	public DriverCommand getParsedCommand() {
+		return parsedCommand;
 	}
-
 }
