@@ -3,12 +3,11 @@ package edu.kis.powp.jobs2d.drivers;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.observer.Subscriber;
 
-public class DriverObserver implements Subscriber {
-
+public class ApplicationInfoUpdateDriverChangeObserver implements Subscriber {
     private final DriverManager driverManager;
     private final Application application;
 
-    public DriverObserver(DriverManager driverManager, Application application) {
+    public ApplicationInfoUpdateDriverChangeObserver(DriverManager driverManager, Application application) {
         this.driverManager = driverManager;
         this.application = application;
     }
@@ -20,6 +19,6 @@ public class DriverObserver implements Subscriber {
 
     @Override
     public String toString() {
-        return "Driver Name Label Change Observer";
+        return "Application Info Update Driver Change Observer";
     }
 }
