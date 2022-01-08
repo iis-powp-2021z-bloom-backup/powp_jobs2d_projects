@@ -1,16 +1,16 @@
-package edu.kis.powp.jobs2d.drivers.proxy;
+package edu.kis.powp.jobs2d.drivers.decorator;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.command.manager.DeviceUsageManager;
 
 
-public class DeviceUsageProxy implements Job2dDriver {
+public class DeviceUsageDecorator implements Job2dDriver {
 	private final Job2dDriver driver;
 	private final DeviceUsageManager deviceUsageManager;
 	private int posX = 0;
 	private int posY = 0;
 
-	public DeviceUsageProxy(Job2dDriver driver, DeviceUsageManager deviceUsageManager) {
+	public DeviceUsageDecorator(Job2dDriver driver, DeviceUsageManager deviceUsageManager) {
 		this.driver = driver;
 		this.deviceUsageManager = deviceUsageManager;
 	}
@@ -18,7 +18,7 @@ public class DeviceUsageProxy implements Job2dDriver {
 	@Override
 	public void setPosition(int x, int y) {
 		this.driver.setPosition(x, y);
-		this.deviceUsageManager.notifyHeadMovePerformed(calculateDistance(x, y));
+		this.deviceUsageManager.updateHeadDistance(calculateDistance(x, y));
 		this.posX = x;
 		this.posY = y;
 
@@ -27,7 +27,7 @@ public class DeviceUsageProxy implements Job2dDriver {
 	@Override
 	public void operateTo(int x, int y) {
 		this.driver.operateTo(x, y);
-		this.deviceUsageManager.notifyOperationPerformed(calculateDistance(x, y));
+		this.deviceUsageManager.updateDeviceUsedDistance(calculateDistance(x, y));
 		this.posX = x;
 		this.posY = y;
 	}

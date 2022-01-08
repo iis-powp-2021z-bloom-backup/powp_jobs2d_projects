@@ -13,14 +13,14 @@ public class DeviceUsageManager {
 	private double distanceTravelled = 0.0;
 	private double distanceDeviceUsed = 0.0;
 
-	public void notifyHeadMovePerformed(double distance) {
+	public void updateHeadDistance(double distance) {
 		this.distanceTravelled += distance;
 		this.publisher.notifyObservers();
 	}
 
-	public void notifyOperationPerformed(double distance) {
+	public void updateDeviceUsedDistance(double distance) {
 		this.distanceDeviceUsed += distance;
-		this.notifyHeadMovePerformed(distance);
+		this.updateHeadDistance(distance);
 		this.publisher.notifyObservers();
 
 	}
