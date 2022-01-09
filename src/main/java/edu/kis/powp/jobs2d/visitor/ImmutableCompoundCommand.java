@@ -22,7 +22,7 @@ public class ImmutableCompoundCommand implements ICompoundCommand {
     public ImmutableCompoundCommand(List<DriverCommand> commands, String name) {
         super();
         this.commandsList = new ArrayList<>();
-        commands.iterator().forEachRemaining(command -> this.commandsList.add(command.clone()));
+        commands.iterator().forEachRemaining(command -> this.commandsList.add((DriverCommand) command.clone()));
         this.name = name;
     }
 
@@ -30,7 +30,7 @@ public class ImmutableCompoundCommand implements ICompoundCommand {
         super();
         this.name = name;
         this.commandsList = new ArrayList<>();
-        other.iterator().forEachRemaining(command -> this.commandsList.add(command.clone()));
+        other.iterator().forEachRemaining(command -> this.commandsList.add((DriverCommand) command.clone()));
     }
 
     public ImmutableCompoundCommand clone() {
@@ -40,7 +40,7 @@ public class ImmutableCompoundCommand implements ICompoundCommand {
             command.name = this.name;
             command.commandsList = new ArrayList<>();
             for (DriverCommand cmd : this.commandsList) {
-                command.commandsList.add(cmd.clone());
+                command.commandsList.add((DriverCommand) cmd.clone());
             }
         } catch (CloneNotSupportedException e) {
             command = new ImmutableCompoundCommand(this, this.name);
