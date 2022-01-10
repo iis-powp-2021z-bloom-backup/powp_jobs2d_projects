@@ -1,0 +1,149 @@
+[
+  {
+    "CLASSNAME": "SetPositionCommand",
+    "DATA": {
+      "posX": -130,
+      "posY": -50
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": -80,
+      "posY": -50
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": -80,
+      "posY": 50
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": -130,
+      "posY": 50
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": -130,
+      "posY": 40
+    }
+  },
+  {
+    "CLASSNAME": "SetPositionCommand",
+    "DATA": {
+      "posX": -10,
+      "posY": -50
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": -60,
+      "posY": -50
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": -60,
+      "posY": 0
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": -10,
+      "posY": 0
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": -10,
+      "posY": 0
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": -10,
+      "posY": 50
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": -60,
+      "posY": 50
+    }
+  },
+  {
+    "CLASSNAME": "SetPositionCommand",
+    "DATA": {
+      "posX": 10,
+      "posY": -50
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": 60,
+      "posY": -50
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": 60,
+      "posY": 50
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": 10,
+      "posY": 50
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": 10,
+      "posY": -50
+    }
+  },
+  {
+    "CLASSNAME": "SetPositionCommand",
+    "DATA": {
+      "posX": 80,
+      "posY": 50
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": 80,
+      "posY": -50
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": 130,
+      "posY": 50
+    }
+  },
+  {
+    "CLASSNAME": "OperateToCommand",
+    "DATA": {
+      "posX": 130,
+      "posY": -50
+    }
+  }
+]
