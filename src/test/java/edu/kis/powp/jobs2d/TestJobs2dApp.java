@@ -1,16 +1,14 @@
 package edu.kis.powp.jobs2d;
 
-import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import edu.kis.legacy.drawer.panel.DrawPanelController;
 import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
+import edu.kis.powp.jobs2d.drivers.transformation.TransformationDriver;
+import edu.kis.powp.jobs2d.drivers.transformation.operation.Rotate;
+import edu.kis.powp.jobs2d.drivers.transformation.operation.Scale;
 import edu.kis.powp.jobs2d.events.SelectLoadSecretCommandOptionListener;
 import edu.kis.powp.jobs2d.events.SelectRunCurrentCommandOptionListener;
 import edu.kis.powp.jobs2d.events.SelectTestFigure2OptionListener;
@@ -19,12 +17,17 @@ import edu.kis.powp.jobs2d.features.CommandsFeature;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class TestJobs2dApp {
 	private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	/**
 	 * Setup test concerning preset figures in context.
-	 * 
+	 *
 	 * @param application Application context.
 	 */
 	private static void setupPresetTests(Application application) {
@@ -39,7 +42,7 @@ public class TestJobs2dApp {
 
 	/**
 	 * Setup test using driver commands in context.
-	 * 
+	 *
 	 * @param application Application context.
 	 */
 	private static void setupCommandTests(Application application) {
@@ -51,7 +54,7 @@ public class TestJobs2dApp {
 
 	/**
 	 * Setup driver manager, and set default Job2dDriver for application.
-	 * 
+	 *
 	 * @param application Application context.
 	 */
 	private static void setupDrivers(Application application) {
@@ -65,6 +68,25 @@ public class TestJobs2dApp {
 
 		driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
 		DriverFeature.addDriver("Special line Simulator", driver);
+
+		TransformationDriver scaleTransformationDriver = new TransformationDriver(
+				new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic line")
+		);
+		scaleTransformationDriver.addNewTransformation(new Scale(0.5d, 1.5d));
+		DriverFeature.addDriver("Scale", scaleTransformationDriver);
+
+		TransformationDriver rotateTransformationDriver = new TransformationDriver(
+				new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic line")
+		);
+		rotateTransformationDriver.addNewTransformation(new Rotate(45.0d));
+		DriverFeature.addDriver("Rotate", rotateTransformationDriver);
+
+		TransformationDriver scaleAndRotateTransformationDriver = new TransformationDriver(
+				new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic line"));
+		scaleAndRotateTransformationDriver.addNewTransformation(new Rotate(45.0d));
+		scaleAndRotateTransformationDriver.addNewTransformation(new Scale(0.5d, 1.5d));
+		DriverFeature.addDriver("Rotate and scale", scaleAndRotateTransformationDriver);
+
 		DriverFeature.updateDriverInfo();
 	}
 
@@ -80,7 +102,7 @@ public class TestJobs2dApp {
 
 	/**
 	 * Setup menu for adjusting logging settings.
-	 * 
+	 *
 	 * @param application Application context.
 	 */
 	private static void setupLogger(Application application) {
