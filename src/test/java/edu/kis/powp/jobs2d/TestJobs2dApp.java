@@ -5,6 +5,10 @@ import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver;
+import edu.kis.powp.jobs2d.command.gui.DeviceUsageCalculatorWindow;
+import edu.kis.powp.jobs2d.command.gui.DeviceUsageCalculatorWindowDistanceChangeObserver;
+import edu.kis.powp.jobs2d.drivers.decorator.DeviceUsageDecorator;
+import edu.kis.powp.jobs2d.drivers.SelectMouseFigureOptionListener;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.drivers.transformation.TransformationDriver;
 import edu.kis.powp.jobs2d.drivers.transformation.operation.Rotate;
@@ -13,7 +17,10 @@ import edu.kis.powp.jobs2d.events.SelectLoadSecretCommandOptionListener;
 import edu.kis.powp.jobs2d.events.SelectRunCurrentCommandOptionListener;
 import edu.kis.powp.jobs2d.events.SelectTestFigure2OptionListener;
 import edu.kis.powp.jobs2d.events.SelectTestFigureOptionListener;
+import edu.kis.powp.jobs2d.drivers.composite.DriverComposite;
+import edu.kis.powp.jobs2d.events.*;
 import edu.kis.powp.jobs2d.features.CommandsFeature;
+import edu.kis.powp.jobs2d.features.DeviceUsageFeature;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
 
@@ -50,6 +57,10 @@ public class TestJobs2dApp {
 
 		application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
 
+		application.addTest("Mouse figure", new SelectMouseFigureOptionListener(application.getFreePanel(), DriverFeature.getDriverManager()));
+
+		application.addTest("Count subcommands", new SelectCommandVisitorCounterListener(DriverFeature.getDriverManager()));
+		application.addTest("ICompoundCommandVisitorTest", new SelectICompoundCommandVisitorCounterListener());
 	}
 
 	/**
@@ -58,6 +69,8 @@ public class TestJobs2dApp {
 	 * @param application Application context.
 	 */
 	private static void setupDrivers(Application application) {
+		DriverComposite driverComposite = new DriverComposite();
+
 		Job2dDriver loggerDriver = new LoggerDriver();
 		DriverFeature.addDriver("Logger driver", loggerDriver);
 
@@ -87,6 +100,16 @@ public class TestJobs2dApp {
 		scaleAndRotateTransformationDriver.addNewTransformation(new Scale(0.5d, 1.5d));
 		DriverFeature.addDriver("Rotate and scale", scaleAndRotateTransformationDriver);
 
+		driverComposite.add(new LoggerDriver());
+		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
+		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
+		DriverFeature.addDriver("Driver composite", driverComposite);
+
+
+		DriverFeature.updateDriverInfo();
+
+		driver = new DeviceUsageDecorator(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"), DeviceUsageFeature.getDeviceUsageManager());
+		DriverFeature.addDriver("Line Simulator with Device Usage", driver);
 		DriverFeature.updateDriverInfo();
 	}
 
@@ -98,6 +121,13 @@ public class TestJobs2dApp {
 		CommandManagerWindowCommandChangeObserver windowObserver = new CommandManagerWindowCommandChangeObserver(
 				commandManager);
 		CommandsFeature.getDriverCommandManager().getChangePublisher().addSubscriber(windowObserver);
+
+		DeviceUsageCalculatorWindow deviceUsageCalculatorWindow = new DeviceUsageCalculatorWindow(DeviceUsageFeature.getDeviceUsageManager());
+		application.addWindowComponent("Device Usage Manager", deviceUsageCalculatorWindow);
+
+		DeviceUsageCalculatorWindowDistanceChangeObserver deviceUsageWindowObserver =
+				new DeviceUsageCalculatorWindowDistanceChangeObserver(deviceUsageCalculatorWindow);
+		DeviceUsageFeature.getDeviceUsageManager().getPublisher().addSubscriber(deviceUsageWindowObserver);
 	}
 
 	/**
@@ -126,8 +156,9 @@ public class TestJobs2dApp {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				Application app = new Application("Jobs 2D");
-				DrawerFeature.setupDrawerPlugin(app);
+				DrawerFeature.setupDrawerPlugin(app,app.getFreePanel());
 				CommandsFeature.setupCommandManager();
+				DeviceUsageFeature.setupDeviceUsageManager();
 
 				DriverFeature.setupDriverPlugin(app);
 				setupDrivers(app);
