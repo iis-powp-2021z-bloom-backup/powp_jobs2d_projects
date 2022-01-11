@@ -10,11 +10,15 @@ import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver;
+import edu.kis.powp.jobs2d.command.gui.DeviceUsageCalculatorWindow;
+import edu.kis.powp.jobs2d.command.gui.DeviceUsageCalculatorWindowDistanceChangeObserver;
+import edu.kis.powp.jobs2d.drivers.decorator.DeviceUsageDecorator;
 import edu.kis.powp.jobs2d.drivers.SelectMouseFigureOptionListener;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.drivers.composite.DriverComposite;
 import edu.kis.powp.jobs2d.events.*;
 import edu.kis.powp.jobs2d.features.CommandsFeature;
+import edu.kis.powp.jobs2d.features.DeviceUsageFeature;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
 
@@ -78,6 +82,10 @@ public class TestJobs2dApp {
 
 
 		DriverFeature.updateDriverInfo();
+
+		driver = new DeviceUsageDecorator(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"), DeviceUsageFeature.getDeviceUsageManager());
+		DriverFeature.addDriver("Line Simulator with Device Usage", driver);
+		DriverFeature.updateDriverInfo();
 	}
 
 	private static void setupWindows(Application application) {
@@ -88,6 +96,13 @@ public class TestJobs2dApp {
 		CommandManagerWindowCommandChangeObserver windowObserver = new CommandManagerWindowCommandChangeObserver(
 				commandManager);
 		CommandsFeature.getDriverCommandManager().getChangePublisher().addSubscriber(windowObserver);
+
+		DeviceUsageCalculatorWindow deviceUsageCalculatorWindow = new DeviceUsageCalculatorWindow(DeviceUsageFeature.getDeviceUsageManager());
+		application.addWindowComponent("Device Usage Manager", deviceUsageCalculatorWindow);
+
+		DeviceUsageCalculatorWindowDistanceChangeObserver deviceUsageWindowObserver =
+				new DeviceUsageCalculatorWindowDistanceChangeObserver(deviceUsageCalculatorWindow);
+		DeviceUsageFeature.getDeviceUsageManager().getPublisher().addSubscriber(deviceUsageWindowObserver);
 	}
 
 	/**
@@ -118,6 +133,7 @@ public class TestJobs2dApp {
 				Application app = new Application("Jobs 2D");
 				DrawerFeature.setupDrawerPlugin(app,app.getFreePanel());
 				CommandsFeature.setupCommandManager();
+				DeviceUsageFeature.setupDeviceUsageManager();
 
 				DriverFeature.setupDriverPlugin(app);
 				setupDrivers(app);
