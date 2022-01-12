@@ -18,12 +18,12 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
     private List<Subscriber> observerList;
     private boolean observersDeleted = false;
-    private DriverCommandManager commandManager;
+    private final DriverCommandManager commandManager;
 
-    private JTextArea currentCommandField;
+    private final JTextArea currentCommandField;
 
     private String observerListString;
-    private JTextArea observerListField;
+    private final JTextArea observerListField;
 
     /**
      *
@@ -137,11 +137,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
     @Override
     public void HideIfVisibleAndShowIfHidden() {
         updateObserverListField();
-        if (this.isVisible()) {
-            this.setVisible(false);
-        } else {
-            this.setVisible(true);
-        }
+        this.setVisible(!this.isVisible());
     }
 
 }
