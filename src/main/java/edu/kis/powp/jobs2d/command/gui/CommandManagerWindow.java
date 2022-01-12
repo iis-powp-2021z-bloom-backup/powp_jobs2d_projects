@@ -16,6 +16,7 @@ import edu.kis.powp.observer.Subscriber;
 
 public class CommandManagerWindow extends JFrame implements WindowComponent {
 
+
     private List<Subscriber> observerList;
     private boolean observersDeleted = false;
     private final DriverCommandManager commandManager;
@@ -25,9 +26,6 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
     private String observerListString;
     private final JTextArea observerListField;
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 9204679248304669948L;
 
     public CommandManagerWindow(DriverCommandManager commandManager) {
