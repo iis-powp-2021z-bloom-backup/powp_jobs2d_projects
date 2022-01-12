@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.kis.powp.jobs2d.command.CompoundCommand;
 import edu.kis.powp.jobs2d.command.DriverCommand;
+import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.observer.Publisher;
 
 /**
@@ -11,6 +12,7 @@ import edu.kis.powp.observer.Publisher;
  */
 public class DriverCommandManager {
 	private DriverCommand currentCommand = null;
+	private DriverManager driverManager = null;
 
 	private Publisher changePublisher = new Publisher();
 
@@ -58,4 +60,11 @@ public class DriverCommandManager {
 		return changePublisher;
 	}
 
+	public synchronized void setDriverManager(DriverManager driverManager) {
+		this.driverManager = driverManager;
+	}
+
+	public synchronized void runCurrentCommand() {
+		currentCommand.execute(driverManager.getCurrentDriver());
+	}
 }
