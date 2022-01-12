@@ -25,6 +25,10 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private String observerListString;
 	private final JTextArea observerListField;
 
+	/**
+	 *
+	 */
+
 	private static final long serialVersionUID = 9204679248304669948L;
 
 	public CommandManagerWindow(DriverCommandManager commandManager) {
@@ -87,6 +91,25 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
 	private void runCommand() {
 		commandManager.runCurrentCommand();
+	}
+
+	private void giveCommand() {
+		final JFileChooser fc = new JFileChooser();
+		DriverCommand newCommands = null;
+
+		int returnVal = fc.showOpenDialog(null);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			CommandReader commandParser = new CommandReader(file);
+			try {
+				commandParser.fillListFromFile();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			newCommands = commandParser.getCommandList();
+		}
+		commandManager.setCurrentCommand(newCommands);
+		updateCurrentCommandField();
 	}
 
 	public void updateCurrentCommandField() {
