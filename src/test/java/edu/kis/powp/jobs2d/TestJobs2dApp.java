@@ -80,12 +80,9 @@ public class TestJobs2dApp {
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
 		DriverFeature.addDriver("Driver composite", driverComposite);
 
-
-		DriverFeature.updateDriverInfo();
-
 		driver = new DeviceUsageDecorator(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"), DeviceUsageFeature.getDeviceUsageManager());
 		DriverFeature.addDriver("Line Simulator with Device Usage", driver);
-		DriverFeature.updateDriverInfo();
+
 	}
 
 	private static void setupWindows(Application application) {
@@ -134,8 +131,8 @@ public class TestJobs2dApp {
 				DrawerFeature.setupDrawerPlugin(app,app.getFreePanel());
 				CommandsFeature.setupCommandManager();
 				DeviceUsageFeature.setupDeviceUsageManager();
-
 				DriverFeature.setupDriverPlugin(app);
+				DriverFeature.setUpDriverNameLabelChangeManager();
 				setupDrivers(app);
 				setupPresetTests(app);
 				setupCommandTests(app);
