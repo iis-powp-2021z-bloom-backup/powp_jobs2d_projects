@@ -140,7 +140,7 @@ public class TestJobs2dApp {
 				setupLogger(app);
 				setupWindows(app);
 
-				RecordingFeature.setupRecordingPlugin(app);
+				RecordingFeature.setupRecordingPlugin(app, DriverFeature.getDriverManager());
 
 				app.setVisibility(true);
 			}

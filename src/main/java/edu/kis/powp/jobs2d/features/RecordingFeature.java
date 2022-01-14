@@ -1,8 +1,10 @@
 package edu.kis.powp.jobs2d.features;
 
 import edu.kis.powp.appbase.Application;
+import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.drivers.decorator.RecordingDriverDecorator;
 import edu.kis.powp.jobs2d.events.SelectRecordMacroMenuOptionListener;
+import edu.kis.powp.jobs2d.observers.RecordingFeatureDriverChangeObserver;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -10,8 +12,8 @@ import java.util.Arrays;
 
 public class RecordingFeature {
 	private static boolean isRecording = false;
-	private static final RecordingDriverDecorator driver =
-			new RecordingDriverDecorator(DriverFeature.getDriverManager().getCurrentDriver());
+	private static RecordingDriverDecorator recordingDriver;
+	private static DriverManager driverManager;
 
 	private static JCheckBoxMenuItem checkbox;
 
@@ -22,15 +24,19 @@ public class RecordingFeature {
 
 	private RecordingFeature() {}
 
-	public static void setupRecordingPlugin(Application app) {
+	public static void setupRecordingPlugin(Application app, DriverManager drvMgr) {
 		ActionListener listener = new SelectRecordMacroMenuOptionListener();
+
+		driverManager = drvMgr;
+		recordingDriver = new RecordingDriverDecorator(driverManager);
 
 		app.addComponentMenu(RecordingFeature.class, RECORD_MACRO);
 		app.addComponentMenuElementWithCheckBox(RecordingFeature.class, RECORDING, listener, isRecording);
 		app.addComponentMenuElement(RecordingFeature.class, CLEAR_MACRO, listener);
 		app.addComponentMenuElement(RecordingFeature.class, RUN_MACRO, listener);
 
-		DriverFeature.getDriverManager().getChangePublisher().addSubscriber(driver);
+		driverManager.getChangePublisher()
+				.addSubscriber(new RecordingFeatureDriverChangeObserver(driverManager, recordingDriver));
 		checkbox = Arrays.stream(app.getFreePanel().getRootPane().getJMenuBar().getSubElements())
 				.flatMap(x -> Arrays.stream(x.getSubElements()))
 				.flatMap(x -> Arrays.stream(x.getSubElements()))
@@ -41,13 +47,13 @@ public class RecordingFeature {
 				.orElseGet(JCheckBoxMenuItem::new);
 	}
 
-	public static void register() {
+	private static void updateCurrentDriver() {
 		checkbox.setState(isRecording());
 
-		if(RecordingFeature.isRecording()) {
-			DriverFeature.getDriverManager().setCurrentDriver(driver);
+		if(isRecording()) {
+			driverManager.setCurrentDriver(recordingDriver);
 		} else {
-			DriverFeature.getDriverManager().setCurrentDriver(driver.getInnerDriver());
+			driverManager.setCurrentDriver(recordingDriver.getInnerDriver());
 		}
 	}
 
@@ -57,20 +63,20 @@ public class RecordingFeature {
 
 	public static void stopRecording() {
 		isRecording = false;
-		register();
+		updateCurrentDriver();
 	}
 
 	public static void startRecording() {
 		isRecording = true;
-		register();
+		updateCurrentDriver();
 	}
 
 	public static void toggleRecording() {
 		isRecording = !isRecording;
-		register();
+		updateCurrentDriver();
 	}
 
 	public static RecordingDriverDecorator getRecordingDriver() {
-		return driver;
+		return recordingDriver;
 	}
 }
