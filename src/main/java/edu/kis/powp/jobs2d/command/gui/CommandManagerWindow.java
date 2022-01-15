@@ -122,15 +122,15 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		currentCommandField.setText(commandManager.getCurrentCommandString());
 	}
 
-	public void deleteObservers(JButton deleteButton) {
+	public void deleteObservers(JButton resetButton) {
 		if (observersDeleted) {
-			resetObservers(deleteButton);
+			resetObservers(resetButton);
 		} else {
 			this.observerList = this.commandManager.getChangePublisher().getSubscribers();
 			commandManager.getChangePublisher().clearObservers();
 			this.updateObserverListField();
 			observersDeleted = true;
-			deleteButton.setText("Reset observers");
+			resetButton.setText("Reset observers");
 		}
 	}
 
