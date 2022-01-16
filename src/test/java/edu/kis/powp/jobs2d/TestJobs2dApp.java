@@ -17,10 +17,7 @@ import edu.kis.powp.jobs2d.drivers.SelectMouseFigureOptionListener;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.drivers.composite.DriverComposite;
 import edu.kis.powp.jobs2d.events.*;
-import edu.kis.powp.jobs2d.features.CommandsFeature;
-import edu.kis.powp.jobs2d.features.DeviceUsageFeature;
-import edu.kis.powp.jobs2d.features.DrawerFeature;
-import edu.kis.powp.jobs2d.features.DriverFeature;
+import edu.kis.powp.jobs2d.features.*;
 
 public class TestJobs2dApp {
 	private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -63,10 +60,6 @@ public class TestJobs2dApp {
 	 */
 	private static void setupDrivers(Application application) {
 		DriverComposite driverComposite = new DriverComposite();
-
-		Job2dDriver loggerDriver = new LoggerDriver();
-		DriverFeature.addDriver("Logger driver", loggerDriver);
-
 		DrawPanelController drawerController = DrawerFeature.getDrawerController();
 		Job2dDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
 		DriverFeature.addDriver("Line Simulator", driver);
@@ -79,9 +72,6 @@ public class TestJobs2dApp {
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
 		DriverFeature.addDriver("Driver composite", driverComposite);
-
-		driver = new DeviceUsageDecorator(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"), DeviceUsageFeature.getDeviceUsageManager());
-		DriverFeature.addDriver("Line Simulator with Device Usage", driver);
 
 	}
 
@@ -121,6 +111,16 @@ public class TestJobs2dApp {
 		application.addComponentMenuElement(Logger.class, "OFF logging", (ActionEvent e) -> logger.setLevel(Level.OFF));
 	}
 
+	private static void setUpExtensions(){
+		Job2dDriver driver = new LoggerDriver();
+		ExtensionFeature.addExtension("Logger driver", driver);
+
+		DrawPanelController drawerController = DrawerFeature.getDrawerController();
+		driver = new DeviceUsageDecorator(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"), DeviceUsageFeature.getDeviceUsageManager());
+		ExtensionFeature.addExtension("Line Simulator with Device Usage",driver);
+	}
+
+
 	/**
 	 * Launch the application.
 	 */
@@ -133,12 +133,13 @@ public class TestJobs2dApp {
 				DeviceUsageFeature.setupDeviceUsageManager();
 				DriverFeature.setupDriverPlugin(app);
 				DriverFeature.setUpDriverNameLabelChangeManager();
+				ExtensionFeature.setUpExtensionFeature(app);
 				setupDrivers(app);
 				setupPresetTests(app);
 				setupCommandTests(app);
 				setupLogger(app);
 				setupWindows(app);
-
+				setUpExtensions();
 				app.setVisibility(true);
 			}
 		});
