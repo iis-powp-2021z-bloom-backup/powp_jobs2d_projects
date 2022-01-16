@@ -6,7 +6,7 @@ import edu.kis.powp.jobs2d.command.visitor.VisitorCommand;
 /**
  * Implementation of Job2dDriverCommand for setPosition command functionality.
  */
-public class SetPositionCommand implements DriverCommand, Replaceable {
+public class SetPositionCommand implements DriverCommand {
 
 	private int posX, posY;
 
@@ -42,9 +42,11 @@ public class SetPositionCommand implements DriverCommand, Replaceable {
 		return posY;
 	}
 
-	@Override
-	public void replace(Object o) {
-		this.posX = ((SetPositionCommand) o).getPosX();
-		this.posY = ((SetPositionCommand) o).getPosY();
+	public void setPosX(int posX) {
+		this.posX = posX;
+	}
+
+	public void setPosY(int posY) {
+		this.posY = posY;
 	}
 }

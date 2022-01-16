@@ -1,19 +1,19 @@
-package edu.kis.powp.jobs2d.command.visitor;
+package edu.kis.powp.jobs2d.transforms;
 
-public class VisitorRotate extends TransformationVisitor {
+public class RotateTransform implements Transform {
 	private final double cos;
 	private final double sin;
 
-	public VisitorRotate(double angle) {
+	public RotateTransform(double angle) {
 		this.cos = Math.cos(Math.toRadians(angle));
 		this.sin = Math.sin(Math.toRadians(angle));
 	}
-	
-	public int calculateNewPositionX(int x, int y) {
+
+	public int transformX(int x, int y) {
 		return (int) ((x * this.cos) - (y * this.sin));
 	}
 
-	public int calculateNewPositionY(int x, int y) {
+	public int transformY(int x, int y) {
 		return (int) ((x * this.sin) + (y * this.cos));
 	}
 }

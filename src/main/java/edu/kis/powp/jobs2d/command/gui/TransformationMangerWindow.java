@@ -4,6 +4,10 @@ import edu.kis.powp.appbase.gui.WindowComponent;
 import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.visitor.*;
 import edu.kis.powp.jobs2d.features.CommandsFeature;
+import edu.kis.powp.jobs2d.transforms.FlipXTransform;
+import edu.kis.powp.jobs2d.transforms.FlipYTransform;
+import edu.kis.powp.jobs2d.transforms.RotateTransform;
+import edu.kis.powp.jobs2d.transforms.ScaleTransform;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,7 +64,7 @@ public class TransformationMangerWindow extends JFrame implements WindowComponen
         Double factor = (Double) model.getValue();
         DriverCommand command = CommandsFeature.getDriverCommandManager().getCurrentCommand();
         if(factor != null && command != null) {
-            command.accept(new VisitorScale(factor));
+            command.accept(new TransformationVisitor(new ScaleTransform(factor)));
         }
     }
 
@@ -73,8 +77,8 @@ public class TransformationMangerWindow extends JFrame implements WindowComponen
         DriverCommand command = CommandsFeature.getDriverCommandManager().getCurrentCommand();
         if(chosen != CANCEL && command != null) {
             VisitorCommand visitor;
-            if(chosen == VERTICAL) visitor = new VisitorFlipX();
-            else visitor = new VisitorFlipY();
+            if(chosen == VERTICAL) visitor = new TransformationVisitor(new FlipXTransform());
+            else visitor = new TransformationVisitor(new FlipYTransform());
             command.accept(visitor);
         }
     }
@@ -109,7 +113,7 @@ public class TransformationMangerWindow extends JFrame implements WindowComponen
         int degree = slider.getValue();
         DriverCommand command = CommandsFeature.getDriverCommandManager().getCurrentCommand();
         if(degree != 0 && command != null) {
-            command.accept(new VisitorRotate(degree));
+            command.accept(new TransformationVisitor(new RotateTransform(degree)));
         }
     }
 
