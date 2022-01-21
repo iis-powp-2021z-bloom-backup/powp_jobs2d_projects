@@ -3,7 +3,6 @@ package edu.kis.powp.jobs2d.command.gui;
 import edu.kis.powp.appbase.gui.WindowComponent;
 import edu.kis.powp.jobs2d.command.CommandReader;
 import edu.kis.powp.jobs2d.command.DriverCommand;
-import edu.kis.powp.jobs2d.command.manager.DriverCommandManager;
 import edu.kis.powp.observer.Subscriber;
 
 import javax.swing.*;
@@ -16,7 +15,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
 	private List<Subscriber> observerList;
 	private boolean observersDeleted = false;
-	private final DriverCommandManager commandManager;
+	private final CommandManager commandManager;
 
 	private final JTextArea currentCommandField;
 
@@ -29,7 +28,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
 	private static final long serialVersionUID = 9204679248304669948L;
 
-	public CommandManagerWindow(DriverCommandManager commandManager) {
+	public CommandManagerWindow(CommandManager commandManager) {
 		this.setTitle("Command Manager");
 		this.setSize(400, 400);
 		Container content = this.getContentPane();
@@ -96,7 +95,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	}
 
 	private void runCommand() {
-		commandManager.runCurrentCommand();
+		commandManager.runCommand();
 	}
 
 	private void giveCommand() {
