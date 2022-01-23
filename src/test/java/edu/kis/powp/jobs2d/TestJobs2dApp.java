@@ -43,14 +43,15 @@ public class TestJobs2dApp {
 	 * @param application Application context.
 	 */
 	private static void setupCommandTests(Application application) {
-		application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener());
+		ExtensionFeature.addExtensionTest("Load secret command", new SelectLoadSecretCommandOptionListener());
 
-		application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
+		ExtensionFeature.addExtensionTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
 
-		application.addTest("Mouse figure", new SelectMouseFigureOptionListener(application.getFreePanel(), DriverFeature.getDriverManager()));
+		ExtensionFeature.addExtensionTest("Mouse figure", new SelectMouseFigureOptionListener(application.getFreePanel(), DriverFeature.getDriverManager()));
 
-		application.addTest("Count subcommands", new SelectCommandVisitorCounterListener(DriverFeature.getDriverManager()));
-		application.addTest("ICompoundCommandVisitorTest", new SelectICompoundCommandVisitorCounterListener());
+		ExtensionFeature.addExtensionTest("Count subcommands", new SelectCommandVisitorCounterListener(DriverFeature.getDriverManager()));
+		ExtensionFeature.addExtensionTest("ICompoundCommandVisitorTest", new SelectICompoundCommandVisitorCounterListener());
+
 	}
 
 	/**
@@ -59,7 +60,6 @@ public class TestJobs2dApp {
 	 * @param application Application context.
 	 */
 	private static void setupDrivers(Application application) {
-		DriverComposite driverComposite = new DriverComposite();
 		DrawPanelController drawerController = DrawerFeature.getDrawerController();
 		Job2dDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
 		DriverFeature.addDriver("Line Simulator", driver);
@@ -68,7 +68,8 @@ public class TestJobs2dApp {
 		driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
 		DriverFeature.addDriver("Special line Simulator", driver);
 
-		driverComposite.add(new LoggerDriver());
+		//driverComposite.add(new LoggerDriver());
+		DriverComposite driverComposite = new DriverComposite();
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
 		DriverFeature.addDriver("Driver composite", driverComposite);
@@ -113,11 +114,11 @@ public class TestJobs2dApp {
 
 	private static void setUpExtensions(){
 		Job2dDriver driver = new LoggerDriver();
-		ExtensionFeature.addExtension("Logger driver", driver);
+		ExtensionFeature.addExtensionDriver("Logger driver", driver);
 
 		DrawPanelController drawerController = DrawerFeature.getDrawerController();
 		driver = new DeviceUsageDecorator(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"), DeviceUsageFeature.getDeviceUsageManager());
-		ExtensionFeature.addExtension("Line Simulator with Device Usage",driver);
+		ExtensionFeature.addExtensionDriver("Line Simulator with Device Usage",driver);
 	}
 
 

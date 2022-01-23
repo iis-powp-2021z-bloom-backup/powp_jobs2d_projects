@@ -3,18 +3,24 @@ package edu.kis.powp.jobs2d.features;
 import edu.kis.legacy.drawer.panel.DrawPanelController;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.Job2dDriver;
+import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.drivers.ExtensionsManager;
 import edu.kis.powp.jobs2d.drivers.SelectExtensionOptionListener;
+import edu.kis.powp.jobs2d.drivers.composite.DriverComposite;
 
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExtensionFeature {
-	private static ExtensionsManager extensionsManager = new ExtensionsManager();
+	private static ExtensionsManager extensionsManager =  new ExtensionsManager();
 	private static Application app;
 
+	public static ExtensionsManager getExtensionsManager(){
+		return extensionsManager;
+	}
 
 	/**
 	 * Setup Extension Plugin and add to application.
@@ -31,10 +37,14 @@ public class ExtensionFeature {
 	 * @param name   Button name.
 	 * @param driver Job2dDriver object.
 	 */
-	public static void addExtension(String name, Job2dDriver driver){
-		SelectExtensionOptionListener listener = new SelectExtensionOptionListener();
+	public static void addExtensionDriver(String name, Job2dDriver driver){
+		SelectExtensionOptionListener listener = new SelectExtensionOptionListener(extensionsManager);
 		app.addComponentMenuElementWithCheckBox(ExtensionFeature.class, name, listener,false);
 		addExtensionToList(driver);
+	}
+
+	public static void addExtensionTest(String name, ActionListener actionListener){
+		app.addComponentMenuElement(ExtensionFeature.class, name, actionListener);
 	}
 
 	private static void addExtensionToList(Job2dDriver job2dDriver){

@@ -9,19 +9,12 @@ import java.util.List;
 public class SelectExtensionOptionListener implements ActionListener {
     private ExtensionsManager extensionsManager;
 
+    public SelectExtensionOptionListener(ExtensionsManager extensionsManager) {
+        this.extensionsManager = extensionsManager;
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        List<Job2dDriver> extensionList = extensionsManager.getExtensionList();
-        if(extensionList.isEmpty()){
-            //extensionList
-        }
-        for(Job2dDriver job2dDriver: extensionList){
-            System.out.println(job2dDriver.toString());
-            System.out.println(e.paramString());
-            if(job2dDriver.toString().equals(e.getActionCommand())){
-
-            }
-        }
+        extensionsManager.enableOrDisableExtension(e.getActionCommand());
     }
 }
