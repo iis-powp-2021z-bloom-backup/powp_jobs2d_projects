@@ -66,7 +66,6 @@ public class DriverCommandManager implements CommandManager {
 		return changePublisher;
 	}
 
-	@Override
 	public synchronized void setDriverManager(DriverManager driverManager) {
 		this.driverManager = driverManager;
 	}
