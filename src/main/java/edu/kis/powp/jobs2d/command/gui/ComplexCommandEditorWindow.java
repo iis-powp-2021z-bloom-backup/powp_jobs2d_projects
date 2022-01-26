@@ -8,7 +8,6 @@ import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.OperateToCommand;
 import edu.kis.powp.jobs2d.command.SetPositionCommand;
 import edu.kis.powp.jobs2d.command.modifier.model.Point;
-import edu.kis.powp.jobs2d.command.modifier.VisitorModifier;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.features.CommandsFeature;
 
@@ -35,8 +34,6 @@ public class ComplexCommandEditorWindow extends JFrame implements WindowComponen
 
     private static final Insets INSETS = new Insets(0, 0, 0, 0);
 
-    private final VisitorModifier visitorModifier;
-
     private JList<Object> commandJList;
     private CompoundCommand compoundCommand;
     private JFormattedTextField xTextField;
@@ -46,7 +43,6 @@ public class ComplexCommandEditorWindow extends JFrame implements WindowComponen
     private DrawPanelController drawPanelController;
 
     public ComplexCommandEditorWindow() {
-        this.visitorModifier = new VisitorModifier();
         this.setTitle("Complex command editor");
         this.setSize(600, 400);
         Container container = this.getContentPane();
@@ -173,7 +169,7 @@ public class ComplexCommandEditorWindow extends JFrame implements WindowComponen
         Object x = xTextField.getValue();
         Object y = yTextField.getValue();
         if (x != null && y != null) {
-            this.driverCommandList.get(selectedIndex).setPoint(visitorModifier, new Point((Integer) x, (Integer) y));
+            this.driverCommandList.get(selectedIndex).setPoint(new Point((Integer) x, (Integer) y));
             refreshWindow();
         }
     }
@@ -225,8 +221,8 @@ public class ComplexCommandEditorWindow extends JFrame implements WindowComponen
                 JList list = (JList) mouseEvent.getSource();
                 int itemIndex = list.locationToIndex(mouseEvent.getPoint());
                 DriverCommand command = compoundCommand.getDriverCommands().get(itemIndex);
-                xTextField.setValue(command.getPoint(visitorModifier).getX());
-                yTextField.setValue(command.getPoint(visitorModifier).getY());
+                xTextField.setValue(command.getPoint().getX());
+                yTextField.setValue(command.getPoint().getY());
             }
         };
     }

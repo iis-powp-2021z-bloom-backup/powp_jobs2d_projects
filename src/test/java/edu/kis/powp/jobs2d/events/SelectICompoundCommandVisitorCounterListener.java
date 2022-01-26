@@ -7,7 +7,6 @@ import edu.kis.powp.jobs2d.command.OperateToCommand;
 import edu.kis.powp.jobs2d.command.SetPositionCommand;
 import edu.kis.powp.jobs2d.command.modifier.model.OperationNotSupportedException;
 import edu.kis.powp.jobs2d.command.modifier.model.Point;
-import edu.kis.powp.jobs2d.command.modifier.IVisitorModifier;
 import edu.kis.powp.jobs2d.command.visitor.VisitorCounter;
 
 import java.awt.event.ActionEvent;
@@ -41,12 +40,12 @@ class DataTest implements ICompoundCommand
     }
 
     @Override
-    public Point getPoint(IVisitorModifier visitor) throws OperationNotSupportedException {
+    public Point getPoint() throws OperationNotSupportedException {
         throw new OperationNotSupportedException();
     }
 
     @Override
-    public void setPoint(IVisitorModifier visitor, Point point) throws OperationNotSupportedException {
+    public void setPoint(Point point) throws OperationNotSupportedException {
         throw new OperationNotSupportedException();
     }
 
