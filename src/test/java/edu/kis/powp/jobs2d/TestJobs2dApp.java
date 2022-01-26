@@ -18,6 +18,7 @@ import edu.kis.powp.jobs2d.features.CommandsFeature;
 import edu.kis.powp.jobs2d.features.DeviceUsageFeature;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
+import edu.kis.powp.jobs2d.features.RecordingFeature;
 
 public class TestJobs2dApp {
 	private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -102,6 +103,9 @@ public class TestJobs2dApp {
 		ComplexCommandWindowCommandChangeObserver complexCommandWindowCommandChangeObserver = new ComplexCommandWindowCommandChangeObserver(complexCommandEditorWindow);
 		application.addWindowComponent("Complex command editor", complexCommandEditorWindow);
 		CommandsFeature.getDriverCommandManager().getChangePublisher().addSubscriber(complexCommandWindowCommandChangeObserver);
+    
+		TransformationMangerWindow transformationManger = new TransformationMangerWindow();
+		application.addWindowComponent("Transformation manager", transformationManger);
 	}
 
 	/**
@@ -140,6 +144,8 @@ public class TestJobs2dApp {
 				setupCommandTests(app);
 				setupLogger(app);
 				setupWindows(app);
+
+				RecordingFeature.setupRecordingPlugin(app, DriverFeature.getDriverManager());
 
 				app.setVisibility(true);
 			}

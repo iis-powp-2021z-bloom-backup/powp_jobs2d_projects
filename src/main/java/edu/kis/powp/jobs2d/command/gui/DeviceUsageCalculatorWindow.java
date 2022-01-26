@@ -18,7 +18,7 @@ public class DeviceUsageCalculatorWindow extends JFrame implements WindowCompone
 
 
 	public DeviceUsageCalculatorWindow(DeviceUsageManager deviceUsageManager) {
-		this.setTitle("Command Manager");
+		this.setTitle("Device Usage");
 		this.setSize(400, 200);
 		Container content = this.getContentPane();
 		content.setLayout(new GridBagLayout());
