@@ -4,6 +4,9 @@ package edu.kis.powp.jobs2d.visitor;
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.ICompoundCommand;
+import edu.kis.powp.jobs2d.command.modifier.model.OperationNotSupportedException;
+import edu.kis.powp.jobs2d.command.modifier.model.Point;
+import edu.kis.powp.jobs2d.command.modifier.IVisitorModifier;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -42,6 +45,16 @@ public class ImmutableCompoundCommand implements ICompoundCommand {
         return command;
     }
 
+    @Override
+    public Point getPoint(IVisitorModifier visitor) throws OperationNotSupportedException {
+        throw new OperationNotSupportedException();
+    }
+
+    @Override
+    public void setPoint(IVisitorModifier visitor, Point point) throws OperationNotSupportedException {
+        throw new OperationNotSupportedException();
+    }
+
     public ImmutableCompoundCommand(ICompoundCommand other, String name) {
         super();
         this.name = name;
@@ -49,13 +62,8 @@ public class ImmutableCompoundCommand implements ICompoundCommand {
         other.iterator().forEachRemaining(command -> this.commandsList.add((DriverCommand) command.clone()));
     }
 
-
     public void execute(Job2dDriver driver) {
         this.iterator().forEachRemaining(command -> execute(driver));
     }
 
-   // @Override
-   // public Object clone() {
-   //     return null;
-   // }
 }

@@ -1,13 +1,14 @@
 package edu.kis.powp.jobs2d.command;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
+import edu.kis.powp.jobs2d.command.modifier.model.OperationNotSupportedException;
+import edu.kis.powp.jobs2d.command.modifier.model.Point;
+import edu.kis.powp.jobs2d.command.modifier.IVisitorModifier;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 public class CompoundCommand implements ICompoundCommand {
 
@@ -17,6 +18,10 @@ public class CompoundCommand implements ICompoundCommand {
     public CompoundCommand(List<DriverCommand> commandList, String name) {
         this.name = name;
         this.driverCommands = commandList;
+    }
+
+    public List<DriverCommand> getDriverCommands() {
+        return driverCommands;
     }
 
     @Override
@@ -30,6 +35,16 @@ public class CompoundCommand implements ICompoundCommand {
     }
 
     @Override
+    public Point getPoint(IVisitorModifier visitor) {
+        throw new OperationNotSupportedException();
+    }
+
+    @Override
+    public void setPoint(IVisitorModifier visitor, Point point) {
+        throw new OperationNotSupportedException();
+    }
+
+    @Override
     public String toString() {
         return name;
     }
@@ -40,4 +55,5 @@ public class CompoundCommand implements ICompoundCommand {
                 .map(x -> (DriverCommand) x.clone())
                 .collect(toList()), this.name);
     }
+
 }
