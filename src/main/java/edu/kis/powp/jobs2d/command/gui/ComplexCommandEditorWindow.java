@@ -4,11 +4,10 @@ import edu.kis.legacy.drawer.panel.DrawPanelController;
 import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.gui.WindowComponent;
 import edu.kis.powp.jobs2d.command.CompoundCommand;
-import edu.kis.powp.jobs2d.command.DriverCommand;
-import edu.kis.powp.jobs2d.command.OperateToCommand;
-import edu.kis.powp.jobs2d.command.SetPositionCommand;
-import edu.kis.powp.jobs2d.command.modifier.model.Point;
-import edu.kis.powp.jobs2d.command.modifier.VisitorModifier;
+import edu.kis.powp.jobs2d.command.manager.DriverCommandManager;
+import edu.kis.powp.jobs2d.command.modifier.ModifierCache;
+import edu.kis.powp.jobs2d.command.modifier.model.ModifierCommand;
+import edu.kis.powp.jobs2d.command.modifier.VisitorCache;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.features.CommandsFeature;
 
@@ -21,41 +20,43 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.text.NumberFormatter;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class ComplexCommandEditorWindow extends JFrame implements WindowComponent {
 
     private static final Insets INSETS = new Insets(0, 0, 0, 0);
 
-    private final VisitorModifier visitorModifier;
+    private final VisitorCache visitorCache;
+    private final ModifierCache modifierCache;
 
     private JList<Object> commandJList;
     private CompoundCommand compoundCommand;
     private JFormattedTextField xTextField;
     private JFormattedTextField yTextField;
-    private List<DriverCommand> driverCommandList = new ArrayList<>();
     private LineDriverAdapter lineDriverAdapter;
     private DrawPanelController drawPanelController;
 
     public ComplexCommandEditorWindow() {
-        this.visitorModifier = new VisitorModifier();
-        this.setTitle("Complex command editor");
-        this.setSize(600, 400);
-        Container container = this.getContentPane();
-        container.setLayout(new BorderLayout());
+        this.visitorCache = new VisitorCache();
+        this.modifierCache = ModifierCache.getInstance();
         initializeView();
     }
 
     public void updateCurrentCommand() {
-        this.compoundCommand = (CompoundCommand) CommandsFeature.getDriverCommandManager().getCurrentCommand();
+        DriverCommandManager driverCommandManager = CommandsFeature.getDriverCommandManager();
+        this.compoundCommand = (CompoundCommand) driverCommandManager.getCurrentCommand();
         populateListData();
     }
 
@@ -65,6 +66,9 @@ public class ComplexCommandEditorWindow extends JFrame implements WindowComponen
     }
 
     private void initializeView() {
+        this.setTitle("Complex command editor");
+        this.setSize(600, 400);
+
         Container content = this.getContentPane();
         content.setLayout(new GridBagLayout());
         content.setSize(1000, 300);
@@ -169,11 +173,13 @@ public class ComplexCommandEditorWindow extends JFrame implements WindowComponen
     }
 
     private void onSaveCords() {
-        int selectedIndex = commandJList.getSelectedIndex();
+        int itemIndex = commandJList.getSelectedIndex();
         Object x = xTextField.getValue();
         Object y = yTextField.getValue();
         if (x != null && y != null) {
-            this.driverCommandList.get(selectedIndex).setPoint(visitorModifier, new Point((Integer) x, (Integer) y));
+            ModifierCommand modifierCommand = modifierCache.getModifierCommands().get(itemIndex);
+            modifierCommand.setX((Integer) x);
+            modifierCommand.setY((Integer) y);
             refreshWindow();
         }
     }
@@ -186,7 +192,7 @@ public class ComplexCommandEditorWindow extends JFrame implements WindowComponen
     private void onOrderChangeUp() {
         int selectedIndex = commandJList.getSelectedIndex();
         if (selectedIndex > 0) {
-            Collections.swap(driverCommandList, selectedIndex, selectedIndex - 1);
+            Collections.swap(modifierCache.getModifierCommands(), selectedIndex, selectedIndex - 1);
             refreshWindow();
             commandJList.setSelectedIndex(selectedIndex - 1);
         }
@@ -194,15 +200,15 @@ public class ComplexCommandEditorWindow extends JFrame implements WindowComponen
 
     private void onOrderChangeDown() {
         int selectedIndex = commandJList.getSelectedIndex();
-        if (selectedIndex < driverCommandList.size() - 1) {
-            Collections.swap(driverCommandList, selectedIndex, selectedIndex + 1);
+        if (selectedIndex < modifierCache.getModifierCommands().size() - 1) {
+            Collections.swap(modifierCache.getModifierCommands(), selectedIndex, selectedIndex + 1);
             refreshWindow();
             commandJList.setSelectedIndex(selectedIndex + 1);
         }
     }
 
     private void onSave() {
-        CommandsFeature.getDriverCommandManager().setCurrentCommand(compoundCommand);
+        CommandsFeature.getDriverCommandManager().setCurrentCommand(modifierCache.getCachedDriverCommands());
         onClose();
     }
 
@@ -212,7 +218,7 @@ public class ComplexCommandEditorWindow extends JFrame implements WindowComponen
 
     private void onRemoveClick() {
         int selectedIndex = commandJList.getSelectedIndex();
-        this.driverCommandList.remove(selectedIndex);
+        modifierCache.getModifierCommands().remove(selectedIndex);
         refreshWindow();
         clearInputData();
     }
@@ -224,9 +230,9 @@ public class ComplexCommandEditorWindow extends JFrame implements WindowComponen
             public void mouseClicked(MouseEvent mouseEvent) {
                 JList list = (JList) mouseEvent.getSource();
                 int itemIndex = list.locationToIndex(mouseEvent.getPoint());
-                DriverCommand command = compoundCommand.getDriverCommands().get(itemIndex);
-                xTextField.setValue(command.getPoint(visitorModifier).getX());
-                yTextField.setValue(command.getPoint(visitorModifier).getY());
+                ModifierCommand modifierCommand = modifierCache.getModifierCommands().get(itemIndex);
+                xTextField.setValue(modifierCommand.getX());
+                yTextField.setValue(modifierCommand.getY());
             }
         };
     }
@@ -239,26 +245,18 @@ public class ComplexCommandEditorWindow extends JFrame implements WindowComponen
     }
 
     private void populateListData() {
-        this.driverCommandList = compoundCommand.getDriverCommands();
+        compoundCommand.getDriverCommands().forEach(command -> command.accept(visitorCache));
         refreshWindow();
     }
 
     private void refreshWindow() {
-        commandJList.setListData(driverCommandList.toArray());
+        commandJList.setListData(modifierCache.getModifierCommands().toArray());
         refreshPreviewPanel();
     }
 
     private void refreshPreviewPanel() {
         drawPanelController.clearPanel();
-        driverCommandList.forEach(command -> {
-            if(command instanceof OperateToCommand) {
-                OperateToCommand operateToCommand = (OperateToCommand) command;
-                lineDriverAdapter.operateTo(operateToCommand.getPosX(), operateToCommand.getPosY());
-            } else if (command instanceof SetPositionCommand) {
-                SetPositionCommand setPositionCommand = (SetPositionCommand) command;
-                lineDriverAdapter.setPosition(setPositionCommand.getPosX(), setPositionCommand.getPosY());
-            }
-        });
+        modifierCache.getCachedDriverCommands().execute(lineDriverAdapter);
     }
 
 }

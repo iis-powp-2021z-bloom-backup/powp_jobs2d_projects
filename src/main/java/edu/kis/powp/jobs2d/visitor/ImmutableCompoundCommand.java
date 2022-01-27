@@ -4,9 +4,6 @@ package edu.kis.powp.jobs2d.visitor;
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.ICompoundCommand;
-import edu.kis.powp.jobs2d.command.modifier.model.OperationNotSupportedException;
-import edu.kis.powp.jobs2d.command.modifier.model.Point;
-import edu.kis.powp.jobs2d.command.modifier.IVisitorModifier;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,16 +40,6 @@ public class ImmutableCompoundCommand implements ICompoundCommand {
             command = new ImmutableCompoundCommand(this, this.name);
         }
         return command;
-    }
-
-    @Override
-    public Point getPoint(IVisitorModifier visitor) throws OperationNotSupportedException {
-        throw new OperationNotSupportedException();
-    }
-
-    @Override
-    public void setPoint(IVisitorModifier visitor, Point point) throws OperationNotSupportedException {
-        throw new OperationNotSupportedException();
     }
 
     public ImmutableCompoundCommand(ICompoundCommand other, String name) {
