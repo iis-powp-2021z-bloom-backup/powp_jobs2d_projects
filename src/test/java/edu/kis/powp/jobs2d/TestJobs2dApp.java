@@ -99,6 +99,11 @@ public class TestJobs2dApp {
 				new DeviceUsageCalculatorWindowDistanceChangeObserver(deviceUsageCalculatorWindow);
 		DeviceUsageFeature.getDeviceUsageManager().getPublisher().addSubscriber(deviceUsageWindowObserver);
 
+		ComplexCommandEditorWindow complexCommandEditorWindow = new ComplexCommandEditorWindow();
+		ComplexCommandWindowCommandChangeObserver complexCommandWindowCommandChangeObserver = new ComplexCommandWindowCommandChangeObserver(complexCommandEditorWindow);
+		application.addWindowComponent("Complex command editor", complexCommandEditorWindow);
+		CommandsFeature.getDriverCommandManager().getChangePublisher().addSubscriber(complexCommandWindowCommandChangeObserver);
+    
 		TransformationMangerWindow transformationManger = new TransformationMangerWindow();
 		application.addWindowComponent("Transformation manager", transformationManger);
 	}
