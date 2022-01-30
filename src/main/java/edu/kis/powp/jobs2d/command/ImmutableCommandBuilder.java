@@ -1,21 +1,21 @@
 package edu.kis.powp.jobs2d.command;
 
-import java.util.List;
-
 public class ImmutableCommandBuilder {
-    private String name;
-    private List<DriverCommand> commandsList;
-    public ImmutableCommandBuilder (String name,List<DriverCommand>  commandsList){
+    public String name;
+    public String commandsList;
+    public ImmutableCommandBuilder (String name, String commandsList){
 
         this.name = name;
         this.commandsList = commandsList;
     }
 
+    public ImmutableCommandBuilder(int i) {
+    }
     public ImmutableCommandBuilder setName(String name){
         this.name=name;
         return this;
     }
-    public ImmutableCommandBuilder setCommandsList(List<DriverCommand> commandList){
+    public ImmutableCommandBuilder setCommandsList(String commandList){
         this.commandsList = commandList;
         return this;
     }
