@@ -15,7 +15,7 @@ public class ImmutableCommandBuilder {
         this.name=name;
         return this;
     }
-    public ImmutableCommandBuilder setCommandsList(String commandList){
+    public ImmutableCommandBuilder addCommandsList(String commandList){
         this.commandsList = commandList;
         return this;
     }
