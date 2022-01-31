@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
-public class RecordingFeature {
+public class RecordingFeature implements FeatureInterface{
 	private static boolean isRecording = false;
 	private static RecordingDriverDecorator recordingDriver;
 	private static DriverManager driverManager;
@@ -22,9 +22,11 @@ public class RecordingFeature {
 	public static final String CLEAR_MACRO = "Clear Macro";
 	public static final String RUN_MACRO = "Run Macro";
 
-	private RecordingFeature() {}
+	public RecordingFeature() {}
 
-	public static void setupRecordingPlugin(Application app, DriverManager drvMgr) {
+
+	@Override
+	public void setup(Application app,JPanel jPanel,DriverManager drvMgr) {
 		ActionListener listener = new SelectRecordMacroMenuOptionListener();
 
 		driverManager = drvMgr;
@@ -46,6 +48,7 @@ public class RecordingFeature {
 				.findFirst()
 				.orElseGet(JCheckBoxMenuItem::new);
 	}
+
 
 	private static void updateCurrentDriver() {
 		checkbox.setState(isRecording());
@@ -79,4 +82,5 @@ public class RecordingFeature {
 	public static RecordingDriverDecorator getRecordingDriver() {
 		return recordingDriver;
 	}
+
 }

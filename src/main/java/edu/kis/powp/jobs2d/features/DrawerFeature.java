@@ -1,12 +1,13 @@
 package edu.kis.powp.jobs2d.features;
 
 import edu.kis.powp.appbase.Application;
+import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.events.SelectClearPanelOptionListener;
 import edu.kis.legacy.drawer.panel.DrawPanelController;
 
 import javax.swing.*;
 
-public class DrawerFeature {
+public class DrawerFeature implements FeatureInterface{
 
 	private static DrawPanelController drawerController;
 	private static JPanel panel;
@@ -17,7 +18,8 @@ public class DrawerFeature {
 	 * @param application Application context.
 	 * @param freePanel
 	 */
-	public static void setupDrawerPlugin(Application application, JPanel freePanel) {
+	@Override
+	public void setup(Application application, JPanel freePanel, DriverManager drvMgr) {
 		panel = freePanel;
 		SelectClearPanelOptionListener selectClearPanelOptionListener = new SelectClearPanelOptionListener();
 
@@ -27,6 +29,7 @@ public class DrawerFeature {
 
 		drawerController.initialize(application.getFreePanel());
 	}
+
 
 	/**
 	 * Get controller of application drawing panel.
@@ -40,4 +43,5 @@ public class DrawerFeature {
 	public static JPanel getPanel(){
 		return panel;
 	}
+
 }

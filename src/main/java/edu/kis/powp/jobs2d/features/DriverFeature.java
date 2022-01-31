@@ -6,7 +6,9 @@ import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.drivers.SelectDriverMenuOptionListener;
 import edu.kis.powp.jobs2d.drivers.ApplicationInfoUpdateDriverChangeObserver;
 
-public class DriverFeature {
+import javax.swing.*;
+
+public class DriverFeature implements FeatureInterface{
 
 	private static DriverManager driverManager = new DriverManager();
 	private static Application app;
@@ -20,7 +22,8 @@ public class DriverFeature {
 	 * 
 	 * @param application Application context.
 	 */
-	public static void setupDriverPlugin(Application application) {
+	@Override
+	public void setup(Application application, JPanel freePanel,DriverManager drvMgr) {
 		app = application;
 		app.addComponentMenu(DriverFeature.class, "Drivers");
 	}
@@ -40,4 +43,6 @@ public class DriverFeature {
 		ApplicationInfoUpdateDriverChangeObserver applicationInfoUpdateDriverChangeObserver = new ApplicationInfoUpdateDriverChangeObserver(driverManager, app);
 		driverManager.getChangePublisher().addSubscriber(applicationInfoUpdateDriverChangeObserver);
 	}
+
+
 }
