@@ -7,25 +7,33 @@ import edu.kis.powp.jobs2d.drivers.DriverManager;
 
 import javax.swing.*;
 
-public class CommandsFeature implements FeatureInterface{
+public class CommandsFeature implements FeatureInterface {
 
-	private static DriverCommandManager commandManager;
+    private static DriverCommandManager commandManager;
 
-	@Override
-	public void setup(Application application, JPanel freePanel, DriverManager drvMgr) {
-		commandManager = new DriverCommandManager();
-		commandManager.setDriverManager(DriverFeature.getDriverManager());
-		LoggerCommandChangeObserver loggerObserver = new LoggerCommandChangeObserver();
-		commandManager.getChangePublisher().addSubscriber(loggerObserver);
-	}
+    /**
+     * Setup Driver Command Manager.
+     * Parameters required by implemented interface, not used here.
+     *
+     * @param application Application context.
+     * @param freePanel   Free application panel.
+     * @param drvMgr      Driver manager object.
+     */
+    @Override
+    public void setup(Application application, JPanel freePanel, DriverManager drvMgr) {
+        commandManager = new DriverCommandManager();
+        commandManager.setDriverManager(DriverFeature.getDriverManager());
+        LoggerCommandChangeObserver loggerObserver = new LoggerCommandChangeObserver();
+        commandManager.getChangePublisher().addSubscriber(loggerObserver);
+    }
 
-	/**
-	 * Get manager of application driver command.
-	 * 
-	 * @return plotterCommandManager.
-	 */
-	public static DriverCommandManager getDriverCommandManager() {
-		return commandManager;
-	}
+    /**
+     * Get manager of application driver command.
+     *
+     * @return plotterCommandManager.
+     */
+    public static DriverCommandManager getDriverCommandManager() {
+        return commandManager;
+    }
 
 }

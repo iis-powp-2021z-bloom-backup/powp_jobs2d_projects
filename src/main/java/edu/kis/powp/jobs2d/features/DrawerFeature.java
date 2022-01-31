@@ -7,41 +7,43 @@ import edu.kis.legacy.drawer.panel.DrawPanelController;
 
 import javax.swing.*;
 
-public class DrawerFeature implements FeatureInterface{
+public class DrawerFeature implements FeatureInterface {
 
-	private static DrawPanelController drawerController;
-	private static JPanel panel;
+    private static DrawPanelController drawerController;
+    private static JPanel panel;
 
-	/**
-	 * Setup Drawer Plugin and add to application.
-	 * 
-	 * @param application Application context.
-	 * @param freePanel
-	 */
-	@Override
-	public void setup(Application application, JPanel freePanel, DriverManager drvMgr) {
-		panel = freePanel;
-		SelectClearPanelOptionListener selectClearPanelOptionListener = new SelectClearPanelOptionListener();
+    /**
+     * Setup Drawer Plugin and add to application.
+     * DriverManager param not used, required by implemented interface.
+     *
+     * @param application Application context.
+     * @param freePanel   Free application panel.
+     * @param drvMgr      Driver manager object.
+     */
 
-		drawerController = new DrawPanelController();
-		application.addComponentMenu(DrawPanelController.class, "Draw Panel", 0);
-		application.addComponentMenuElement(DrawPanelController.class, "Clear Panel", selectClearPanelOptionListener);
+    @Override
+    public void setup(Application application, JPanel freePanel, DriverManager drvMgr) {
+        panel = freePanel;
+        SelectClearPanelOptionListener selectClearPanelOptionListener = new SelectClearPanelOptionListener();
 
-		drawerController.initialize(application.getFreePanel());
-	}
+        drawerController = new DrawPanelController();
+        application.addComponentMenu(DrawPanelController.class, "Draw Panel", 0);
+        application.addComponentMenuElement(DrawPanelController.class, "Clear Panel", selectClearPanelOptionListener);
 
+        drawerController.initialize(application.getFreePanel());
+    }
 
-	/**
-	 * Get controller of application drawing panel.
-	 * 
-	 * @return drawPanelController.
-	 */
-	public static DrawPanelController getDrawerController() {
-		return drawerController;
-	}
+    /**
+     * Get controller of application drawing panel.
+     *
+     * @return drawPanelController.
+     */
+    public static DrawPanelController getDrawerController() {
+        return drawerController;
+    }
 
-	public static JPanel getPanel(){
-		return panel;
-	}
+    public static JPanel getPanel() {
+        return panel;
+    }
 
 }

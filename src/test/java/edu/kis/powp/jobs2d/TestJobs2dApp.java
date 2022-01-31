@@ -134,25 +134,28 @@ public class TestJobs2dApp {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				Application app = new Application("Jobs 2D");
+
 				DrawerFeature drawerFeature = new DrawerFeature();
 				drawerFeature.setup(app,app.getFreePanel(),DriverFeature.getDriverManager());
 
 				CommandsFeature commandsFeature = new CommandsFeature();
 				commandsFeature.setup(app,app.getFreePanel(),DriverFeature.getDriverManager());
+
 				DeviceUsageFeature deviceUsageFeature = new DeviceUsageFeature();
 				deviceUsageFeature.setup(app,app.getFreePanel(),DriverFeature.getDriverManager());
 
 				DriverFeature driverFeature = new DriverFeature();
 				driverFeature.setup(app, app.getFreePanel(),DriverFeature.getDriverManager());
 				driverFeature.setUpDriverNameLabelChangeManager();
+
+				RecordingFeature recordingFeature = new RecordingFeature();
+				recordingFeature.setup(app, app.getFreePanel(),DriverFeature.getDriverManager());
+
 				setupDrivers(app);
 				setupPresetTests(app);
 				setupCommandTests(app);
 				setupLogger(app);
 				setupWindows(app);
-
-				RecordingFeature recordingFeature = new RecordingFeature();
-				recordingFeature.setup(app, app.getFreePanel(),DriverFeature.getDriverManager());
 
 				app.setVisibility(true);
 			}
