@@ -1,26 +1,22 @@
 package edu.kis.powp.jobs2d.features;
 
-import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.manager.DriverCommandManager;
 import edu.kis.powp.jobs2d.command.manager.LoggerCommandChangeObserver;
-import edu.kis.powp.jobs2d.drivers.DriverManager;
-
-import javax.swing.*;
 
 public class CommandsFeature implements FeatureInterface {
 
     private static DriverCommandManager commandManager;
 
+    public CommandsFeature() {
+        setup();
+    }
+
     /**
      * Setup Driver Command Manager.
      * Parameters required by implemented interface, not used here.
-     *
-     * @param application Application context.
-     * @param freePanel   Free application panel.
-     * @param drvMgr      Driver manager object.
      */
     @Override
-    public void setup(Application application, JPanel freePanel, DriverManager drvMgr) {
+    public void setup() {
         commandManager = new DriverCommandManager();
         commandManager.setDriverManager(DriverFeature.getDriverManager());
         LoggerCommandChangeObserver loggerObserver = new LoggerCommandChangeObserver();

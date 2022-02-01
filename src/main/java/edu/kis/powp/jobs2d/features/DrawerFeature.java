@@ -1,7 +1,6 @@
 package edu.kis.powp.jobs2d.features;
 
 import edu.kis.powp.appbase.Application;
-import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.events.SelectClearPanelOptionListener;
 import edu.kis.legacy.drawer.panel.DrawPanelController;
 
@@ -11,19 +10,20 @@ public class DrawerFeature implements FeatureInterface {
 
     private static DrawPanelController drawerController;
     private static JPanel panel;
+    private final Application application;
 
     /**
      * Setup Drawer Plugin and add to application.
      * DriverManager param not used, required by implemented interface.
-     *
-     * @param application Application context.
-     * @param freePanel   Free application panel.
-     * @param drvMgr      Driver manager object.
      */
+    public DrawerFeature(Application application){
+        this.application = application;
+        setup();
+    }
 
     @Override
-    public void setup(Application application, JPanel freePanel, DriverManager drvMgr) {
-        panel = freePanel;
+    public void setup() {
+        panel = application.getFreePanel();
         SelectClearPanelOptionListener selectClearPanelOptionListener = new SelectClearPanelOptionListener();
 
         drawerController = new DrawPanelController();

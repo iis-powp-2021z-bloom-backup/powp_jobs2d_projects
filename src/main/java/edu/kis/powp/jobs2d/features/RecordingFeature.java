@@ -14,6 +14,7 @@ public class RecordingFeature implements FeatureInterface {
     private static boolean isRecording = false;
     private static RecordingDriverDecorator recordingDriver;
     private static DriverManager driverManager;
+    private static Application application;
 
     private static JCheckBoxMenuItem checkbox;
 
@@ -22,23 +23,21 @@ public class RecordingFeature implements FeatureInterface {
     public static final String CLEAR_MACRO = "Clear Macro";
     public static final String RUN_MACRO = "Run Macro";
 
-    public RecordingFeature() {
+    public RecordingFeature(Application app, DriverManager driverMng) {
+        application=app;
+        driverManager=driverMng;
+        setup();
     }
 
     /**
      * Setup recording Plugin and add to application.
      * Parameters required by implemented interface, freePanel not used here.
-     *
-     * @param application Application context.
-     * @param freePanel   Free application panel.
-     * @param drvMgr      Driver manager object.
      */
 
     @Override
-    public void setup(Application application, JPanel freePanel, DriverManager drvMgr) {
+    public void setup() {
         ActionListener listener = new SelectRecordMacroMenuOptionListener();
 
-        driverManager = drvMgr;
         recordingDriver = new RecordingDriverDecorator(driverManager);
 
         application.addComponentMenu(RecordingFeature.class, RECORD_MACRO);
@@ -77,7 +76,7 @@ public class RecordingFeature implements FeatureInterface {
         updateCurrentDriver();
     }
 
-    public static void startRecording() {
+    public void startRecording() {
         isRecording = true;
         updateCurrentDriver();
     }

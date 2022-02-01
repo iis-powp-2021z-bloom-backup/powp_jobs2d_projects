@@ -61,25 +61,25 @@ public class TestJobs2dApp {
 	 */
 	private static void setupDrivers(Application application) {
 		DriverComposite driverComposite = new DriverComposite();
-
+		DriverFeature driverFeature = new DriverFeature(application);
 		Job2dDriver loggerDriver = new LoggerDriver();
-		DriverFeature.addDriver("Logger driver", loggerDriver);
+		driverFeature.addDriver("Logger driver", loggerDriver);
 
 		DrawPanelController drawerController = DrawerFeature.getDrawerController();
 		Job2dDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
-		DriverFeature.addDriver("Line Simulator", driver);
+		driverFeature.addDriver("Line Simulator", driver);
 		DriverFeature.getDriverManager().setCurrentDriver(driver);
 
 		driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
-		DriverFeature.addDriver("Special line Simulator", driver);
+		driverFeature.addDriver("Special line Simulator", driver);
 
 		driverComposite.add(new LoggerDriver());
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
-		DriverFeature.addDriver("Driver composite", driverComposite);
+		driverFeature.addDriver("Driver composite", driverComposite);
 
 		driver = new DeviceUsageDecorator(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"), DeviceUsageFeature.getDeviceUsageManager());
-		DriverFeature.addDriver("Line Simulator with Device Usage", driver);
+		driverFeature.addDriver("Line Simulator with Device Usage", driver);
 
 	}
 
@@ -135,21 +135,13 @@ public class TestJobs2dApp {
 			public void run() {
 				Application app = new Application("Jobs 2D");
 
-				DrawerFeature drawerFeature = new DrawerFeature();
-				drawerFeature.setup(app,app.getFreePanel(),DriverFeature.getDriverManager());
+				new DrawerFeature(app);
+				new CommandsFeature();
+				new DeviceUsageFeature();
+				new RecordingFeature(app,DriverFeature.getDriverManager());
 
-				CommandsFeature commandsFeature = new CommandsFeature();
-				commandsFeature.setup(app,app.getFreePanel(),DriverFeature.getDriverManager());
-
-				DeviceUsageFeature deviceUsageFeature = new DeviceUsageFeature();
-				deviceUsageFeature.setup(app,app.getFreePanel(),DriverFeature.getDriverManager());
-
-				DriverFeature driverFeature = new DriverFeature();
-				driverFeature.setup(app, app.getFreePanel(),DriverFeature.getDriverManager());
+				DriverFeature driverFeature = new DriverFeature(app);
 				driverFeature.setUpDriverNameLabelChangeManager();
-
-				RecordingFeature recordingFeature = new RecordingFeature();
-				recordingFeature.setup(app, app.getFreePanel(),DriverFeature.getDriverManager());
 
 				setupDrivers(app);
 				setupPresetTests(app);
