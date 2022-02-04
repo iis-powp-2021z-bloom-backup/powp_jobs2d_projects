@@ -17,11 +17,7 @@ import edu.kis.powp.jobs2d.drivers.SelectMouseFigureOptionListener;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.drivers.composite.DriverComposite;
 import edu.kis.powp.jobs2d.events.*;
-import edu.kis.powp.jobs2d.features.CommandsFeature;
-import edu.kis.powp.jobs2d.features.DeviceUsageFeature;
-import edu.kis.powp.jobs2d.features.DrawerFeature;
-import edu.kis.powp.jobs2d.features.DriverFeature;
-import edu.kis.powp.jobs2d.features.RecordingFeature;
+import edu.kis.powp.jobs2d.features.*;
 
 public class TestJobs2dApp {
 	private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -141,6 +137,7 @@ public class TestJobs2dApp {
 				setupWindows(app);
 
 				RecordingFeature.setupRecordingPlugin(app, DriverFeature.getDriverManager());
+				CommandHistoryFeature.setupHistoryPlugin(app);
 
 				app.setVisibility(true);
 			}
