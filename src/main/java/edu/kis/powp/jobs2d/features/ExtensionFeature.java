@@ -42,11 +42,6 @@ public class ExtensionFeature {
 		app.addComponentMenuElementWithCheckBox(ExtensionFeature.class, name, listener,false);
 		addExtensionToList(driver);
 	}
-
-	public static void addExtensionTest(String name, ActionListener actionListener){
-		app.addComponentMenuElement(ExtensionFeature.class, name, actionListener);
-	}
-
 	private static void addExtensionToList(Job2dDriver job2dDriver){
 		extensionsManager.addExtension(job2dDriver);
 	}

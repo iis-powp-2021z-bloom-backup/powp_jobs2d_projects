@@ -43,14 +43,14 @@ public class TestJobs2dApp {
 	 * @param application Application context.
 	 */
 	private static void setupCommandTests(Application application) {
-		ExtensionFeature.addExtensionTest("Load secret command", new SelectLoadSecretCommandOptionListener());
+		FeaturesFeature.addFeatureTest("Load secret command", new SelectLoadSecretCommandOptionListener());
 
-		ExtensionFeature.addExtensionTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
+		FeaturesFeature.addFeatureTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
 
-		ExtensionFeature.addExtensionTest("Mouse figure", new SelectMouseFigureOptionListener(application.getFreePanel(), DriverFeature.getDriverManager()));
+		FeaturesFeature.addFeatureTest("Mouse figure", new SelectMouseFigureOptionListener(application.getFreePanel(), DriverFeature.getDriverManager()));
 
-		ExtensionFeature.addExtensionTest("Count subcommands", new SelectCommandVisitorCounterListener(DriverFeature.getDriverManager()));
-		ExtensionFeature.addExtensionTest("ICompoundCommandVisitorTest", new SelectICompoundCommandVisitorCounterListener());
+		FeaturesFeature.addFeatureTest("Count subcommands", new SelectCommandVisitorCounterListener(DriverFeature.getDriverManager()));
+		FeaturesFeature.addFeatureTest("ICompoundCommandVisitorTest", new SelectICompoundCommandVisitorCounterListener());
 
 	}
 
@@ -135,6 +135,7 @@ public class TestJobs2dApp {
 				DriverFeature.setupDriverPlugin(app);
 				DriverFeature.setUpDriverNameLabelChangeManager();
 				ExtensionFeature.setUpExtensionFeature(app);
+				FeaturesFeature.setUpFeaturesManager(app);
 				setupDrivers(app);
 				setupPresetTests(app);
 				setupCommandTests(app);
