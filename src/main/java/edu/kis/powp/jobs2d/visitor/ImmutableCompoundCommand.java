@@ -49,13 +49,8 @@ public class ImmutableCompoundCommand implements ICompoundCommand {
         other.iterator().forEachRemaining(command -> this.commandsList.add((DriverCommand) command.clone()));
     }
 
-
     public void execute(Job2dDriver driver) {
         this.iterator().forEachRemaining(command -> execute(driver));
     }
 
-   // @Override
-   // public Object clone() {
-   //     return null;
-   // }
 }

@@ -8,11 +8,28 @@ import edu.kis.powp.jobs2d.command.visitor.VisitorCommand;
  */
 public class SetPositionCommand implements DriverCommand {
 
-	private int posX, posY;
+	private int posX;
+	private int posY;
 
 	public SetPositionCommand(int posX, int posY) {
 		super();
 		this.posX = posX;
+		this.posY = posY;
+	}
+
+	public int getPosX() {
+		return posX;
+	}
+
+	public void setPosX(int posX) {
+		this.posX = posX;
+	}
+
+	public int getPosY() {
+		return posY;
+	}
+
+	public void setPosY(int posY) {
 		this.posY = posY;
 	}
 
@@ -29,8 +46,10 @@ public class SetPositionCommand implements DriverCommand {
 			return new SetPositionCommand(this.posX, this.posY);
 		}
 	}
+  
 	@Override
 	public void accept(VisitorCommand visitor) {
 		visitor.visit(this);
 	}
+
 }
