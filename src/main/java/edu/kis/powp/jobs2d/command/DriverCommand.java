@@ -13,8 +13,8 @@ public interface DriverCommand extends Cloneable {
 	 * 
 	 * @param driver driver.
 	 */
-	public void execute(Job2dDriver driver);
+	void execute(Job2dDriver driver);
 
-	public Object clone();
-	public void accept(VisitorCommand visitor);
+	Object clone();
+	void accept(VisitorCommand visitor);
 }

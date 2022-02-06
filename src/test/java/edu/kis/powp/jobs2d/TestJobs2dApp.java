@@ -17,10 +17,7 @@ import edu.kis.powp.jobs2d.drivers.SelectMouseFigureOptionListener;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.drivers.composite.DriverComposite;
 import edu.kis.powp.jobs2d.events.*;
-import edu.kis.powp.jobs2d.features.CommandsFeature;
-import edu.kis.powp.jobs2d.features.DeviceUsageFeature;
-import edu.kis.powp.jobs2d.features.DrawerFeature;
-import edu.kis.powp.jobs2d.features.DriverFeature;
+import edu.kis.powp.jobs2d.features.*;
 
 public class TestJobs2dApp {
 	private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -46,14 +43,15 @@ public class TestJobs2dApp {
 	 * @param application Application context.
 	 */
 	private static void setupCommandTests(Application application) {
-		application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener());
+		FeaturesFeature.addFeatureTest("Load secret command", new SelectLoadSecretCommandOptionListener());
 
-		application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
+		FeaturesFeature.addFeatureTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
 
-		application.addTest("Mouse figure", new SelectMouseFigureOptionListener(application.getFreePanel(), DriverFeature.getDriverManager()));
+		FeaturesFeature.addFeatureTest("Mouse figure", new SelectMouseFigureOptionListener(application.getFreePanel(), DriverFeature.getDriverManager()));
 
-		application.addTest("Count subcommands", new SelectCommandVisitorCounterListener(DriverFeature.getDriverManager()));
-		application.addTest("ICompoundCommandVisitorTest", new SelectICompoundCommandVisitorCounterListener());
+		FeaturesFeature.addFeatureTest("Count subcommands", new SelectCommandVisitorCounterListener(DriverFeature.getDriverManager()));
+		FeaturesFeature.addFeatureTest("ICompoundCommandVisitorTest", new SelectICompoundCommandVisitorCounterListener());
+
 	}
 
 	/**
@@ -62,11 +60,6 @@ public class TestJobs2dApp {
 	 * @param application Application context.
 	 */
 	private static void setupDrivers(Application application) {
-		DriverComposite driverComposite = new DriverComposite();
-
-		Job2dDriver loggerDriver = new LoggerDriver();
-		DriverFeature.addDriver("Logger driver", loggerDriver);
-
 		DrawPanelController drawerController = DrawerFeature.getDrawerController();
 		Job2dDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
 		DriverFeature.addDriver("Line Simulator", driver);
@@ -75,13 +68,11 @@ public class TestJobs2dApp {
 		driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
 		DriverFeature.addDriver("Special line Simulator", driver);
 
-		driverComposite.add(new LoggerDriver());
+		//driverComposite.add(new LoggerDriver());
+		DriverComposite driverComposite = new DriverComposite();
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
 		DriverFeature.addDriver("Driver composite", driverComposite);
-
-		driver = new DeviceUsageDecorator(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"), DeviceUsageFeature.getDeviceUsageManager());
-		DriverFeature.addDriver("Line Simulator with Device Usage", driver);
 
 	}
 
@@ -121,6 +112,16 @@ public class TestJobs2dApp {
 		application.addComponentMenuElement(Logger.class, "OFF logging", (ActionEvent e) -> logger.setLevel(Level.OFF));
 	}
 
+	private static void setUpExtensions(){
+		Job2dDriver driver = new LoggerDriver();
+		ExtensionFeature.addExtensionDriver("Logger driver", driver);
+
+		DrawPanelController drawerController = DrawerFeature.getDrawerController();
+		driver = new DeviceUsageDecorator(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"), DeviceUsageFeature.getDeviceUsageManager());
+		ExtensionFeature.addExtensionDriver("Line Simulator with Device Usage",driver);
+	}
+
+
 	/**
 	 * Launch the application.
 	 */
@@ -133,12 +134,14 @@ public class TestJobs2dApp {
 				DeviceUsageFeature.setupDeviceUsageManager();
 				DriverFeature.setupDriverPlugin(app);
 				DriverFeature.setUpDriverNameLabelChangeManager();
+				ExtensionFeature.setUpExtensionFeature(app);
+				FeaturesFeature.setUpFeaturesManager(app);
 				setupDrivers(app);
 				setupPresetTests(app);
 				setupCommandTests(app);
 				setupLogger(app);
 				setupWindows(app);
-
+				setUpExtensions();
 				app.setVisibility(true);
 			}
 		});

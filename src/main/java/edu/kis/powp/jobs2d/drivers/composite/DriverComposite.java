@@ -8,12 +8,18 @@ public class DriverComposite implements IDriverComposite{
 	private List<Job2dDriver> drivers;
 
 	public DriverComposite(){
-		this.drivers = new ArrayList<Job2dDriver>();
+		this.drivers = new ArrayList<>();
 	}
+
 	public DriverComposite(Job2dDriver driver){
-		this.drivers = new ArrayList<Job2dDriver>();
+		this.drivers = new ArrayList<>();
 		this.drivers.add(driver);
 	}
+
+	public List<Job2dDriver> getDrivers() {
+		return drivers;
+	}
+
 	@Override
 	public void setPosition(int x, int y) {
 		for (Job2dDriver driver : drivers) {

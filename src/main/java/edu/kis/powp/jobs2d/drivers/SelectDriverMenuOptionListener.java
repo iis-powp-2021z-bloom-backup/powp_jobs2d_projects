@@ -4,12 +4,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
+import edu.kis.powp.jobs2d.features.ExtensionFeature;
 
 public class SelectDriverMenuOptionListener implements ActionListener {
 	private DriverManager driverManager;
 	private Job2dDriver driver;
+	private ExtensionsManager extensionsManager;
 
 	public SelectDriverMenuOptionListener(Job2dDriver driver, DriverManager driverManager) {
+		this.extensionsManager = ExtensionFeature.getExtensionsManager();
 		this.driverManager = driverManager;
 		this.driver = driver;
 	}

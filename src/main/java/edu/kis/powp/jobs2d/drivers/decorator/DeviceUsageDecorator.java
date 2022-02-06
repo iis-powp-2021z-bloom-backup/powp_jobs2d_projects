@@ -34,7 +34,7 @@ public class DeviceUsageDecorator implements Job2dDriver {
 
 	@Override
 	public String toString() {
-		return "Device Usage Proxy";
+		return "Line Simulator with Device Usage";
 	}
 
 	private double calculateDistance(int x, int y) {
