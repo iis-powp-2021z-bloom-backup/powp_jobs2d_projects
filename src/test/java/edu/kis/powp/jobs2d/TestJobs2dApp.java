@@ -139,7 +139,6 @@ public class TestJobs2dApp {
 				new CommandsFeature();
 				new DeviceUsageFeature();
 				new RecordingFeature(app,DriverFeature.getDriverManager());
-
 				DriverFeature driverFeature = new DriverFeature(app);
 				driverFeature.setUpDriverNameLabelChangeManager();
 
