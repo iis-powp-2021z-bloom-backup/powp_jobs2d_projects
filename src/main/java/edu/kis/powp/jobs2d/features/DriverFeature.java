@@ -17,7 +17,6 @@ public class DriverFeature implements FeatureInterface {
 
     public DriverFeature(Application app){
         this.app=app;
-        setup();
     }
 
     /**

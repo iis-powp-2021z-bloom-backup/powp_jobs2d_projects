@@ -26,7 +26,6 @@ public class RecordingFeature implements FeatureInterface {
     public RecordingFeature(Application app, DriverManager driverMng) {
         application=app;
         driverManager=driverMng;
-        setup();
     }
 
     /**

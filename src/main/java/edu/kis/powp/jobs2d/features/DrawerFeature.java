@@ -18,7 +18,6 @@ public class DrawerFeature implements FeatureInterface {
      */
     public DrawerFeature(Application application){
         this.application = application;
-        setup();
     }
 
     @Override

@@ -8,7 +8,6 @@ public class CommandsFeature implements FeatureInterface {
     private static DriverCommandManager commandManager;
 
     public CommandsFeature() {
-        setup();
     }
 
     /**

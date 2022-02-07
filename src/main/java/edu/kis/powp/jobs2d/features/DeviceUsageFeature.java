@@ -7,7 +7,6 @@ public class DeviceUsageFeature implements FeatureInterface {
     private static DeviceUsageManager deviceUsageManager;
 
     public DeviceUsageFeature() {
-        setup();
     }
 
     /**
