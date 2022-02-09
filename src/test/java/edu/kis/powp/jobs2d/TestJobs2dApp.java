@@ -2,6 +2,7 @@ package edu.kis.powp.jobs2d;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,7 +48,10 @@ public class TestJobs2dApp {
 		application.addTest("Mouse figure", new SelectMouseFigureOptionListener(application.getFreePanel(), DriverFeature.getDriverManager()));
 
 		application.addTest("Count subcommands", new SelectCommandVisitorCounterListener(DriverFeature.getDriverManager()));
+
 		application.addTest("ICompoundCommandVisitorTest", new SelectICompoundCommandVisitorCounterListener());
+
+		application.addTest("TestImmutableCommandBuilder", new SelectTestImmutableCommandBuilderTest());
 	}
 
 	/**
