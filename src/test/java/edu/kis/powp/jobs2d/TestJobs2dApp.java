@@ -131,8 +131,13 @@ public class TestJobs2dApp {
 			public void run() {
 				Application app = new Application("Jobs 2D");
 
-				FeatureManager featureManager = new FeatureManager(app);
-				featureManager.setupFeatures();
+				FeatureManager.addFeature(new DrawerFeature(app));
+				FeatureManager.addFeature(new CommandsFeature());
+				FeatureManager.addFeature(new DeviceUsageFeature());
+				FeatureManager.addFeature(new DriverFeature(app));
+				FeatureManager.addFeature(new RecordingFeature(app,DriverFeature.getDriverManager()));
+				DriverFeature.setUpDriverNameLabelChangeManager();
+				FeatureManager.setupFeatures();
 
 				setupDrivers(app);
 				setupPresetTests(app);

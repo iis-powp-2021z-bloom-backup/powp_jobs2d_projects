@@ -9,14 +9,14 @@ import edu.kis.powp.jobs2d.drivers.ApplicationInfoUpdateDriverChangeObserver;
 public class DriverFeature implements FeatureInterface {
 
     private static final DriverManager driverManager = new DriverManager();
-    private final Application app;
+    private static Application app = new Application("");
 
     public static DriverManager getDriverManager() {
         return driverManager;
     }
 
-    public DriverFeature(Application app){
-        this.app=app;
+    public DriverFeature(Application application) {
+        app = application;
     }
 
     /**
@@ -36,10 +36,10 @@ public class DriverFeature implements FeatureInterface {
 
     public void addDriver(String name, Job2dDriver driver) {
         SelectDriverMenuOptionListener listener = new SelectDriverMenuOptionListener(driver, driverManager);
-        this.app.addComponentMenuElement(DriverFeature.class, name, listener);
+        app.addComponentMenuElement(DriverFeature.class, name, listener);
     }
 
-    public void setUpDriverNameLabelChangeManager() {
+    public static void setUpDriverNameLabelChangeManager() {
         ApplicationInfoUpdateDriverChangeObserver applicationInfoUpdateDriverChangeObserver = new ApplicationInfoUpdateDriverChangeObserver(driverManager, app);
         driverManager.getChangePublisher().addSubscriber(applicationInfoUpdateDriverChangeObserver);
     }

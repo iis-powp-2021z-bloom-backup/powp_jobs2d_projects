@@ -1,49 +1,23 @@
 package edu.kis.powp.jobs2d.features;
 
-import edu.kis.powp.appbase.Application;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FeatureManager {
 
-    private final DrawerFeature drawerFeature;
-    private final CommandsFeature commandsFeature;
-    private final DeviceUsageFeature deviceUsageFeature;
-    private final RecordingFeature recordingFeature;
-    private final DriverFeature driverFeature;
+    private final static List<FeatureInterface> featureList = new ArrayList<>();
 
-    public FeatureManager(Application app) {
-        this.drawerFeature = new DrawerFeature(app);
-        this.commandsFeature = new CommandsFeature();
-        this.deviceUsageFeature = new DeviceUsageFeature();
-        this.recordingFeature = new RecordingFeature(app, DriverFeature.getDriverManager());
-        this.driverFeature = new DriverFeature(app);
+    public static void setupFeatures() {
+        for (FeatureInterface feature : featureList) {
+            feature.setup();
+        }
     }
 
-    public void setupFeatures() {
-        drawerFeature.setup();
-        commandsFeature.setup();
-        deviceUsageFeature.setup();
-        recordingFeature.setup();
-        driverFeature.setup();
-        driverFeature.setUpDriverNameLabelChangeManager();
+    public static void addFeature(FeatureInterface newFeature) {
+        featureList.add(newFeature);
     }
 
-    public DrawerFeature getDrawerFeature() {
-        return drawerFeature;
-    }
-
-    public CommandsFeature getCommandsFeature() {
-        return commandsFeature;
-    }
-
-    public DeviceUsageFeature getDeviceUsageFeature() {
-        return deviceUsageFeature;
-    }
-
-    public RecordingFeature getRecordingFeature() {
-        return recordingFeature;
-    }
-
-    public DriverFeature getDriverFeature() {
-        return driverFeature;
+    public static List<FeatureInterface> getList() {
+        return featureList;
     }
 }
