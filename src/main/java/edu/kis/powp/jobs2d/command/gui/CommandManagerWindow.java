@@ -77,6 +77,8 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		c.gridx = 0;
 		c.weighty = 1;
 		content.add(btnClearObservers, c);
+
+
 	}
 
 	private void clearCommand() {

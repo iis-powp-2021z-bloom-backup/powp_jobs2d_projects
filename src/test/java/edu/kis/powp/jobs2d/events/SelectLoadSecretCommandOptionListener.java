@@ -10,6 +10,7 @@ import edu.kis.powp.jobs2d.command.OperateToCommand;
 import edu.kis.powp.jobs2d.command.SetPositionCommand;
 import edu.kis.powp.jobs2d.command.manager.DriverCommandManager;
 import edu.kis.powp.jobs2d.features.CommandsFeature;
+import edu.kis.powp.jobs2d.observers.CommandHistoryObserver;
 
 public class SelectLoadSecretCommandOptionListener implements ActionListener {
 
@@ -33,5 +34,6 @@ public class SelectLoadSecretCommandOptionListener implements ActionListener {
 
 		DriverCommandManager manager = CommandsFeature.getDriverCommandManager();
 		manager.setCurrentCommand(commands, "TopSecretCommand");
+
 	}
 }
