@@ -136,6 +136,7 @@ public class TestJobs2dApp {
 				FeatureManager.addFeature(new DeviceUsageFeature());
 				FeatureManager.addFeature(new DriverFeature(app));
 				FeatureManager.addFeature(new RecordingFeature(app,DriverFeature.getDriverManager()));
+				FeatureManager.addFeature(new CommandHistoryFeature(app));
 				DriverFeature.setUpDriverNameLabelChangeManager();
 				FeatureManager.setupFeatures();
 
@@ -144,9 +145,6 @@ public class TestJobs2dApp {
 				setupCommandTests(app);
 				setupLogger(app);
 				setupWindows(app);
-
-				RecordingFeature.setupRecordingPlugin(app, DriverFeature.getDriverManager());
-				CommandHistoryFeature.setupHistoryPlugin(app);
 
 				app.setVisibility(true);
 			}
