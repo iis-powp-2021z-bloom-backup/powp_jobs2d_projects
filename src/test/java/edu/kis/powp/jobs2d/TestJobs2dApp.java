@@ -145,6 +145,9 @@ public class TestJobs2dApp {
 				setupLogger(app);
 				setupWindows(app);
 
+				RecordingFeature.setupRecordingPlugin(app, DriverFeature.getDriverManager());
+				CommandHistoryFeature.setupHistoryPlugin(app);
+
 				app.setVisibility(true);
 			}
 		});
