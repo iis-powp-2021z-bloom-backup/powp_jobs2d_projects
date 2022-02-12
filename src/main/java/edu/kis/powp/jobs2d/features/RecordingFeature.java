@@ -10,73 +10,83 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
-public class RecordingFeature {
-	private static boolean isRecording = false;
-	private static RecordingDriverDecorator recordingDriver;
-	private static DriverManager driverManager;
+public class RecordingFeature implements FeatureInterface {
+    private static boolean isRecording = false;
+    private static RecordingDriverDecorator recordingDriver;
+    private static DriverManager driverManager;
+    private static Application application;
 
-	private static JCheckBoxMenuItem checkbox;
+    private static JCheckBoxMenuItem checkbox;
 
-	public static final String RECORD_MACRO = "Record Macro";
-	public static final String RECORDING = "Recording";
-	public static final String CLEAR_MACRO = "Clear Macro";
-	public static final String RUN_MACRO = "Run Macro";
+    public static final String RECORD_MACRO = "Record Macro";
+    public static final String RECORDING = "Recording";
+    public static final String CLEAR_MACRO = "Clear Macro";
+    public static final String RUN_MACRO = "Run Macro";
 
-	private RecordingFeature() {}
+    public RecordingFeature(Application app, DriverManager driverMng) {
+        application=app;
+        driverManager=driverMng;
+    }
 
-	public static void setupRecordingPlugin(Application app, DriverManager drvMgr) {
-		ActionListener listener = new SelectRecordMacroMenuOptionListener();
+    /**
+     * Setup recording Plugin and add to application.
+     * Parameters required by implemented interface, freePanel not used here.
+     */
 
-		driverManager = drvMgr;
-		recordingDriver = new RecordingDriverDecorator(driverManager);
+    @Override
+    public void setup() {
+        ActionListener listener = new SelectRecordMacroMenuOptionListener();
 
-		app.addComponentMenu(RecordingFeature.class, RECORD_MACRO);
-		app.addComponentMenuElementWithCheckBox(RecordingFeature.class, RECORDING, listener, isRecording);
-		app.addComponentMenuElement(RecordingFeature.class, CLEAR_MACRO, listener);
-		app.addComponentMenuElement(RecordingFeature.class, RUN_MACRO, listener);
+        recordingDriver = new RecordingDriverDecorator(driverManager);
 
-		driverManager.getChangePublisher()
-				.addSubscriber(new RecordingFeatureDriverChangeObserver(driverManager, recordingDriver));
-		checkbox = Arrays.stream(app.getFreePanel().getRootPane().getJMenuBar().getSubElements())
-				.flatMap(x -> Arrays.stream(x.getSubElements()))
-				.flatMap(x -> Arrays.stream(x.getSubElements()))
-				.filter(x -> x instanceof JCheckBoxMenuItem)
-				.map(x -> (JCheckBoxMenuItem) x)
-				.filter(x -> x.getActionCommand().equals(RECORDING))
-				.findFirst()
-				.orElseGet(JCheckBoxMenuItem::new);
-	}
+        application.addComponentMenu(RecordingFeature.class, RECORD_MACRO);
+        application.addComponentMenuElementWithCheckBox(RecordingFeature.class, RECORDING, listener, isRecording);
+        application.addComponentMenuElement(RecordingFeature.class, CLEAR_MACRO, listener);
+        application.addComponentMenuElement(RecordingFeature.class, RUN_MACRO, listener);
 
-	private static void updateCurrentDriver() {
-		checkbox.setState(isRecording());
+        driverManager.getChangePublisher()
+                .addSubscriber(new RecordingFeatureDriverChangeObserver(driverManager, recordingDriver));
+        checkbox = Arrays.stream(application.getFreePanel().getRootPane().getJMenuBar().getSubElements())
+                .flatMap(x -> Arrays.stream(x.getSubElements()))
+                .flatMap(x -> Arrays.stream(x.getSubElements()))
+                .filter(x -> x instanceof JCheckBoxMenuItem)
+                .map(x -> (JCheckBoxMenuItem) x)
+                .filter(x -> x.getActionCommand().equals(RECORDING))
+                .findFirst()
+                .orElseGet(JCheckBoxMenuItem::new);
+    }
 
-		if(isRecording()) {
-			driverManager.setCurrentDriver(recordingDriver);
-		} else {
-			driverManager.setCurrentDriver(recordingDriver.getInnerDriver());
-		}
-	}
+    private static void updateCurrentDriver() {
+        checkbox.setState(isRecording());
 
-	public static boolean isRecording() {
-		return isRecording;
-	}
+        if (isRecording()) {
+            driverManager.setCurrentDriver(recordingDriver);
+        } else {
+            driverManager.setCurrentDriver(recordingDriver.getInnerDriver());
+        }
+    }
 
-	public static void stopRecording() {
-		isRecording = false;
-		updateCurrentDriver();
-	}
+    public static boolean isRecording() {
+        return isRecording;
+    }
 
-	public static void startRecording() {
-		isRecording = true;
-		updateCurrentDriver();
-	}
+    public static void stopRecording() {
+        isRecording = false;
+        updateCurrentDriver();
+    }
 
-	public static void toggleRecording() {
-		isRecording = !isRecording;
-		updateCurrentDriver();
-	}
+    public void startRecording() {
+        isRecording = true;
+        updateCurrentDriver();
+    }
 
-	public static RecordingDriverDecorator getRecordingDriver() {
-		return recordingDriver;
-	}
+    public static void toggleRecording() {
+        isRecording = !isRecording;
+        updateCurrentDriver();
+    }
+
+    public static RecordingDriverDecorator getRecordingDriver() {
+        return recordingDriver;
+    }
+
 }
