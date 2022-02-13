@@ -9,8 +9,6 @@ import edu.kis.legacy.drawer.panel.DrawPanelController;
 import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.*;
-import edu.kis.powp.jobs2d.command.manager.DeviceUsageManager;
-import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.drivers.decorator.DeviceUsageDecorator;
 import edu.kis.powp.jobs2d.drivers.SelectMouseFigureOptionListener;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
@@ -59,19 +57,20 @@ public class TestJobs2dApp {
 	 * @param application Application context.
 	 */
 	private static void setupDrivers(Application application) {
+		DriverComposite driverComposite = new DriverComposite();
+		DriverFeature driverFeature = new DriverFeature(application);
+
 		DrawPanelController drawerController = DrawerFeature.getDrawerController();
 		Job2dDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
-		DriverFeature.addDriver("Line Simulator", driver);
+		driverFeature.addDriver("Line Simulator", driver);
 		DriverFeature.getDriverManager().setCurrentDriver(driver);
 
 		driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
-		DriverFeature.addDriver("Special line Simulator", driver);
+		driverFeature.addDriver("Special line Simulator", driver);
 
-		//driverComposite.add(new LoggerDriver());
-		DriverComposite driverComposite = new DriverComposite();
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
-		DriverFeature.addDriver("Driver composite", driverComposite);
+		driverFeature.addDriver("Driver composite", driverComposite);
 
 	}
 
@@ -95,7 +94,7 @@ public class TestJobs2dApp {
 		ComplexCommandWindowCommandChangeObserver complexCommandWindowCommandChangeObserver = new ComplexCommandWindowCommandChangeObserver(complexCommandEditorWindow);
 		application.addWindowComponent("Complex command editor", complexCommandEditorWindow);
 		CommandsFeature.getDriverCommandManager().getChangePublisher().addSubscriber(complexCommandWindowCommandChangeObserver);
-
+    
 		TransformationMangerWindow transformationManger = new TransformationMangerWindow();
 		application.addWindowComponent("Transformation manager", transformationManger);
 	}
@@ -135,11 +134,14 @@ public class TestJobs2dApp {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				Application app = new Application("Jobs 2D");
-				DrawerFeature.setupDrawerPlugin(app,app.getFreePanel());
-				CommandsFeature.setupCommandManager();
-				DeviceUsageFeature.setupDeviceUsageManager();
-				DriverFeature.setupDriverPlugin(app);
+				FeatureManager.addFeature(new DrawerFeature(app));
+				FeatureManager.addFeature(new CommandsFeature());
+				FeatureManager.addFeature(new DeviceUsageFeature());
+				FeatureManager.addFeature(new DriverFeature(app));
+				FeatureManager.addFeature(new RecordingFeature(app,DriverFeature.getDriverManager()));
+				FeatureManager.addFeature(new CommandHistoryFeature(app));
 				DriverFeature.setUpDriverNameLabelChangeManager();
+				FeatureManager.setupFeatures();
 				ExtensionFeature.setUpExtensionFeature(app);
 				FeaturesFeature.setUpFeaturesManager(app);
 				setupDrivers(app);
@@ -148,7 +150,6 @@ public class TestJobs2dApp {
 				setupLogger(app);
 				setupWindows(app);
 				setUpExtensions();
-				RecordingFeature.setupRecordingPlugin(app, DriverFeature.getDriverManager());
 				app.setVisibility(true);
 			}
 		});

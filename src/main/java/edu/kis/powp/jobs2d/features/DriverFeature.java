@@ -6,38 +6,43 @@ import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.drivers.SelectDriverMenuOptionListener;
 import edu.kis.powp.jobs2d.drivers.ApplicationInfoUpdateDriverChangeObserver;
 
-public class DriverFeature {
+public class DriverFeature implements FeatureInterface {
 
-	private static DriverManager driverManager = new DriverManager();
-	private static Application app;
+    private static final DriverManager driverManager = new DriverManager();
+    private static Application app;
 
-	public static DriverManager getDriverManager() {
-		return driverManager;
-	}
+    public static DriverManager getDriverManager() {
+        return driverManager;
+    }
 
-	/**
-	 * Setup jobs2d drivers Plugin and add to application.
-	 * 
-	 * @param application Application context.
-	 */
-	public static void setupDriverPlugin(Application application) {
-		app = application;
-		app.addComponentMenu(DriverFeature.class, "Drivers");
-	}
+    public DriverFeature(Application application) {
+        app = application;
+    }
 
-	/**
-	 * Add driver to context, create button in driver menu.
-	 * 
-	 * @param name   Button name.
-	 * @param driver Job2dDriver object.
-	 */
-	public static void addDriver(String name, Job2dDriver driver) {
-		SelectDriverMenuOptionListener listener = new SelectDriverMenuOptionListener(driver, driverManager);
-		app.addComponentMenuElement(DriverFeature.class, name, listener);
-	}
+    /**
+     * Setup jobs2d drivers Plugin and add to application.
+     */
+    @Override
+    public void setup() {
+        app.addComponentMenu(DriverFeature.class, "Drivers");
+    }
 
-	public static void setUpDriverNameLabelChangeManager(){
-		ApplicationInfoUpdateDriverChangeObserver applicationInfoUpdateDriverChangeObserver = new ApplicationInfoUpdateDriverChangeObserver(driverManager, app);
-		driverManager.getChangePublisher().addSubscriber(applicationInfoUpdateDriverChangeObserver);
-	}
+    /**
+     * Add driver to context, create button in driver menu.
+     *
+     * @param name   Button name.
+     * @param driver Job2dDriver object.
+     */
+
+    public static void addDriver(String name, Job2dDriver driver) {
+        SelectDriverMenuOptionListener listener = new SelectDriverMenuOptionListener(driver, driverManager);
+        app.addComponentMenuElement(DriverFeature.class, name, listener);
+    }
+
+    public static void setUpDriverNameLabelChangeManager() {
+        ApplicationInfoUpdateDriverChangeObserver applicationInfoUpdateDriverChangeObserver = new ApplicationInfoUpdateDriverChangeObserver(driverManager, app);
+        driverManager.getChangePublisher().addSubscriber(applicationInfoUpdateDriverChangeObserver);
+    }
+
+
 }
