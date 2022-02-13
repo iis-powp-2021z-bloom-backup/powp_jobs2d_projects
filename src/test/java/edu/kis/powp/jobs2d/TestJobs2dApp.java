@@ -9,6 +9,8 @@ import edu.kis.legacy.drawer.panel.DrawPanelController;
 import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.*;
+import edu.kis.powp.jobs2d.command.manager.DeviceUsageManager;
+import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.drivers.decorator.DeviceUsageDecorator;
 import edu.kis.powp.jobs2d.drivers.SelectMouseFigureOptionListener;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
@@ -121,9 +123,8 @@ public class TestJobs2dApp {
 		Job2dDriver driver = new LoggerDriver();
 		ExtensionFeature.addExtensionDriver("Logger driver", driver);
 
-		DrawPanelController drawerController = DrawerFeature.getDrawerController();
-		driver = new DeviceUsageDecorator(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"), DeviceUsageFeature.getDeviceUsageManager());
-		ExtensionFeature.addExtensionDriver("Line Simulator with Device Usage",driver);
+		Job2dDriver driverDeviceUsage = new DeviceUsageDecorator(DriverFeature.getDriverManager(), DeviceUsageFeature.getDeviceUsageManager());
+		ExtensionFeature.addExtensionDriver("Driver with device usage",driverDeviceUsage);
 	}
 
 

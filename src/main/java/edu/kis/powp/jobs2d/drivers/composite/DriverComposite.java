@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DriverComposite implements IDriverComposite{
-	private List<Job2dDriver> drivers;
+	private final List<Job2dDriver> drivers;
 
 	public DriverComposite(){
 		this.drivers = new ArrayList<>();
