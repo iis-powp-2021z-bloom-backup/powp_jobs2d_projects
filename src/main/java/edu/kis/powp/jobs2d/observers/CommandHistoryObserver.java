@@ -13,21 +13,36 @@ import java.util.List;
 public class CommandHistoryObserver implements Subscriber
 {
 	private List<String> commands = new ArrayList<>();
+	private List<DriverCommand> comm = new ArrayList<>();
 	DriverCommandManager manager;
+	int listPosition = comm.size();
 
 	public CommandHistoryObserver(DriverCommandManager manager)
 	{
 		this.manager = manager;
 	}
 
-	public List<String> getCommands()
+	public List<String> getCommandsString()
 	{
 		return commands;
+	}
+
+	public List<DriverCommand> getCommands()
+	{
+		return comm;
+	}
+
+	public Integer getListPosition(){return listPosition;}
+
+	public void setListPosition(Integer i) {
+		this.listPosition = i;
 	}
 
 	@Override
 	public void update()
 	{
 		commands.add(manager.getCurrentCommandString());
+		comm.add(manager.getCurrentCommand());
+		listPosition = comm.size();
 	}
 }

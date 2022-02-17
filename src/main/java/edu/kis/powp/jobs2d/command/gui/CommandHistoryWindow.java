@@ -4,6 +4,7 @@ import edu.kis.powp.appbase.gui.WindowComponent;
 import edu.kis.powp.jobs2d.command.CommandReader;
 import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.manager.DriverCommandManager;
+import edu.kis.powp.jobs2d.features.CommandsFeature;
 import edu.kis.powp.jobs2d.observers.CommandHistoryObserver;
 import edu.kis.powp.observer.Subscriber;
 
@@ -33,13 +34,18 @@ public class CommandHistoryWindow extends JFrame implements WindowComponent {
      *
      */
 
-    public CommandHistoryWindow(List<String> list) {
+    public CommandHistoryWindow(List<String> list, List<DriverCommand> comList) {
         this.setTitle("SHOW");
         this.setSize(400, 400);
         Container content = this.getContentPane();
         content.setLayout(new GridBagLayout());
 
         this.list = list;
+        commandManager = CommandsFeature.getDriverCommandManager();
+        CommandHistoryWindowObserver obs = new CommandHistoryWindowObserver(commandManager);
+
+        commandManager.getChangePublisher().addSubscriber(obs);
+
         GridBagConstraints c = new GridBagConstraints();
 
         currentCommandField = new JTextArea("No history command");
@@ -70,6 +76,7 @@ public class CommandHistoryWindow extends JFrame implements WindowComponent {
                 i = list.size()-1;
             }
             currentCommandField.setText(list.get(i)+" "+i.toString());
+            System.out.println(comList);
         });
 
 
@@ -103,6 +110,7 @@ public class CommandHistoryWindow extends JFrame implements WindowComponent {
                         i = list.size()-1;
                     }
                     currentCommandField.setText(list.get(i)+" "+i.toString());
+                    System.out.println(comList);
                 });
 
         c.fill = GridBagConstraints.BOTH;
@@ -112,7 +120,10 @@ public class CommandHistoryWindow extends JFrame implements WindowComponent {
         content.add(redo, c);
 
         JButton reaction = new JButton("REACTION");
-        reaction.addActionListener((ActionEvent e) -> System.out.println("ABC"));
+        reaction.addActionListener((ActionEvent e) -> {
+                    commandManager.setCurrentCommand(comList, "TopSecretCommand History");
+        }
+                );
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 1;
         c.gridx = 0;
@@ -122,7 +133,6 @@ public class CommandHistoryWindow extends JFrame implements WindowComponent {
         currentCommandField.setText(i.toString());
 
     }
-
 
     @Override
     public void HideIfVisibleAndShowIfHidden() {
