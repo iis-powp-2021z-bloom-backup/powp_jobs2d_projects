@@ -50,7 +50,6 @@ public class TestJobs2dApp {
 		application.addTest("Mouse figure", new SelectMouseFigureOptionListener(application.getFreePanel(), DriverFeature.getDriverManager()));
 
 		application.addTest("Count subcommands", new SelectCommandVisitorCounterListener(DriverFeature.getDriverManager()));
-		//application.addTest("ICompoundCommandVisitorTest", new SelectICompoundCommandVisitorCounterListener());
 	}
 
 	/**
