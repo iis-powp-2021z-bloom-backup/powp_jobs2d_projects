@@ -1,5 +1,7 @@
 package edu.kis.powp.jobs2d.drivers;
 
+import edu.kis.powp.jobs2d.drivers.visitor.VisitorReturn;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +31,7 @@ public class SelectMouseFigureOptionListener implements ActionListener {
         this.drawPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                VisitorReturn visitorReturn = new VisitorReturn();
                 if (firstClick) {
                     firstClick = false;
                     updatePreviousMousePosition(e, halfWindowWidth, halfWindowHeight);
@@ -38,10 +41,11 @@ public class SelectMouseFigureOptionListener implements ActionListener {
                     updatePreviousMousePosition(e, halfWindowWidth, halfWindowHeight);
                 }
 
-                driverManager.getCurrentDriver().setPosition(previousHeadXPosition, previousHeadYPosition);
+                driverManager.accept(visitorReturn);
+                visitorReturn.getSavedJob2dDriver().setPosition(previousHeadXPosition, previousHeadYPosition);
 
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    driverManager.getCurrentDriver().operateTo(e.getX() - halfWindowWidth, e.getY() - halfWindowHeight);
+                    visitorReturn.getSavedJob2dDriver().operateTo(e.getX() - halfWindowWidth, e.getY() - halfWindowHeight);
                 }
 
                 updatePreviousMousePosition(e, halfWindowWidth, halfWindowHeight);
@@ -58,4 +62,5 @@ public class SelectMouseFigureOptionListener implements ActionListener {
         previousHeadYPosition = null;
         previousHeadXPosition = null;
     }
+
 }
