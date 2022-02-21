@@ -2,7 +2,11 @@ package edu.kis.powp.jobs2d.drivers;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.LoggerDriver;
+import edu.kis.powp.jobs2d.drivers.composite.DriverComposite;
+import edu.kis.powp.jobs2d.features.ExtensionFeature;
 import edu.kis.powp.observer.Publisher;
+
+import java.util.List;
 
 /**
  * Driver manager provides means to setup the driver. It also enables other
@@ -24,7 +28,12 @@ public class DriverManager {
 	 * @return Current driver.
 	 */
 	public synchronized Job2dDriver getCurrentDriver() {
-		return currentDriver;
+		List<Job2dDriver> extensions =  ExtensionFeature.getExtensionsManager().getActiveExtensionList();
+		DriverComposite driverComposite = new DriverComposite(currentDriver);
+		for (Job2dDriver driver: extensions) {
+			driverComposite.add(driver);
+		}
+		return driverComposite;
 	}
 
 	public synchronized String getCurrentDriverString(){

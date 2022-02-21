@@ -9,7 +9,7 @@ import edu.kis.powp.jobs2d.drivers.ApplicationInfoUpdateDriverChangeObserver;
 public class DriverFeature implements FeatureInterface {
 
     private static final DriverManager driverManager = new DriverManager();
-    private static Application app = new Application("");
+    private static Application app;
 
     public static DriverManager getDriverManager() {
         return driverManager;
@@ -34,7 +34,7 @@ public class DriverFeature implements FeatureInterface {
      * @param driver Job2dDriver object.
      */
 
-    public void addDriver(String name, Job2dDriver driver) {
+    public static void addDriver(String name, Job2dDriver driver) {
         SelectDriverMenuOptionListener listener = new SelectDriverMenuOptionListener(driver, driverManager);
         app.addComponentMenuElement(DriverFeature.class, name, listener);
     }
