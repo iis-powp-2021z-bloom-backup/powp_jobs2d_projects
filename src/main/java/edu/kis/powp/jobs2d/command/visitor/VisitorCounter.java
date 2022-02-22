@@ -11,8 +11,8 @@ public class VisitorCounter implements VisitorCommand
 {
     private int counter = 0;
 
-    private double currentX = 0;
-    private double currentY = 0;
+    double currentX = 0;
+    double currentY = 0;
 
     public int getCounter()
     {

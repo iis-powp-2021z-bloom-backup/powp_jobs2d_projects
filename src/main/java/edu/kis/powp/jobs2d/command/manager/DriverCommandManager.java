@@ -18,11 +18,6 @@ public class DriverCommandManager implements CommandManager {
 	private DriverCommand currentCommand = null;
 	private DriverManager driverManager = null;
 	private Publisher changePublisher = new Publisher();
-
-	public synchronized DriverCommand setCommand(DriverCommand commandList) {
-		this.currentCommand = commandList;
-		return commandList;
-	}
 	/**
 	 * Set current command.
 	 *
@@ -94,6 +89,5 @@ public class DriverCommandManager implements CommandManager {
 	@Override
 	public void runCommand() {
 		getCurrentCommand().execute(DriverFeature.getDriverManager().getCurrentDriver());
-		getCurrentCommandString();
 	}
 }
