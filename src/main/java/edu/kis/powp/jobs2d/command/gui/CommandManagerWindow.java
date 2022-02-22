@@ -3,12 +3,17 @@ package edu.kis.powp.jobs2d.command.gui;
 import edu.kis.powp.appbase.gui.WindowComponent;
 import edu.kis.powp.jobs2d.command.CommandReader;
 import edu.kis.powp.jobs2d.command.DriverCommand;
+import edu.kis.powp.jobs2d.command.manager.DriverCommandManager;
+import edu.kis.powp.jobs2d.command.visitor.VisitorCommand;
+import edu.kis.powp.jobs2d.command.visitor.VisitorCounter;
+import edu.kis.powp.jobs2d.features.CommandsFeature;
 import edu.kis.powp.observer.Subscriber;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class CommandManagerWindow extends JFrame implements WindowComponent {
@@ -87,6 +92,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		c.gridx = 0;
 		c.weighty = 1;
 		content.add(btnRunCommand, c);
+
 	}
 
 	private void clearCommand() {
@@ -96,6 +102,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
 	private void runCommand() {
 		commandManager.runCommand();
+		updateCurrentCommandField();
 	}
 
 	private void giveCommand() {
@@ -114,7 +121,6 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 			newCommands = commandParser.getCommandList();
 		}
 		commandManager.setCurrentCommand(newCommands);
-		updateCurrentCommandField();
 	}
 
 	public void updateCurrentCommandField() {
@@ -164,5 +170,6 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		updateObserverListField();
 		this.setVisible(!this.isVisible());
 	}
+
 
 }

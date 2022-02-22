@@ -1,11 +1,13 @@
 package edu.kis.powp.jobs2d.command.manager;
-
 import java.util.List;
 
 import edu.kis.powp.jobs2d.command.CompoundCommand;
 import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.gui.CommandManager;
+import edu.kis.powp.jobs2d.command.visitor.VisitorCommand;
+import edu.kis.powp.jobs2d.command.visitor.VisitorCounter;
 import edu.kis.powp.jobs2d.drivers.DriverManager;
+import edu.kis.powp.jobs2d.features.CommandsFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
 import edu.kis.powp.observer.Publisher;
 
@@ -15,12 +17,15 @@ import edu.kis.powp.observer.Publisher;
 public class DriverCommandManager implements CommandManager {
 	private DriverCommand currentCommand = null;
 	private DriverManager driverManager = null;
-
 	private Publisher changePublisher = new Publisher();
 
+	public synchronized DriverCommand setCommand(DriverCommand commandList) {
+		this.currentCommand = commandList;
+		return commandList;
+	}
 	/**
 	 * Set current command.
-	 * 
+	 *
 	 * @param commandList Set the command as current.
 	 */
 	@Override
@@ -31,7 +36,7 @@ public class DriverCommandManager implements CommandManager {
 
 	/**
 	 * Set current command.
-	 * 
+	 *
 	 * @param commandList list of commands representing a compound command.
 	 * @param name        name of the command.
 	 */
@@ -41,7 +46,7 @@ public class DriverCommandManager implements CommandManager {
 
 	/**
 	 * Return current command.
-	 * 
+	 *
 	 * @return Current command.
 	 */
 	public synchronized DriverCommand getCurrentCommand() {
@@ -55,11 +60,27 @@ public class DriverCommandManager implements CommandManager {
 
 	@Override
 	public synchronized String getCurrentCommandString() {
-		if (getCurrentCommand() == null) {
-			return "No command loaded";
-		} else
-			return getCurrentCommand().toString();
+		if (getCurrentCommand() == null ) {
+			return "No command loaded, press 'run command' to show statistics";
+		} else{
+			currentCommand = getCurrentCommand();
+
+			VisitorCounter commandVisitorCounter = new VisitorCounter();
+			CommandsFeature.getDriverCommandManager().getCurrentCommand().accept((VisitorCommand) commandVisitorCounter);
+
+			String command = getCurrentCommand().toString();
+			int operateToCounter = commandVisitorCounter.getCounter();
+			int setPositionCounter = commandVisitorCounter.getCounter();
+			int numberOfSubcommands = operateToCounter + setPositionCounter;
+
+			return("Current command: " + command + "\n"
+					+ "Number of Subcommands: " + numberOfSubcommands + "\n"
+					+ "Number of operateTo command: " + operateToCounter + "\n"
+					+ "Number of setPosition command: " + setPositionCounter + "\n"
+			);
+		}
 	}
+
 
 	@Override
 	public Publisher getChangePublisher() {
@@ -73,5 +94,6 @@ public class DriverCommandManager implements CommandManager {
 	@Override
 	public void runCommand() {
 		getCurrentCommand().execute(DriverFeature.getDriverManager().getCurrentDriver());
+		getCurrentCommandString();
 	}
 }
