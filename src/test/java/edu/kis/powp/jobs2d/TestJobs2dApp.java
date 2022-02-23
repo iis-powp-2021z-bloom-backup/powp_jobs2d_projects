@@ -41,17 +41,21 @@ public class TestJobs2dApp {
 	 * @param application Application context.
 	 */
 	private static void setupCommandTests(Application application) {
-		application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener());
+		FeaturesFeature.addFeatureTest("Load secret command", new SelectLoadSecretCommandOptionListener());
 
-		application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
+		FeaturesFeature.addFeatureTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
 
-		application.addTest("Mouse figure", new SelectMouseFigureOptionListener(application.getFreePanel(), DriverFeature.getDriverManager()));
+		FeaturesFeature.addFeatureTest("Mouse figure", new SelectMouseFigureOptionListener(application.getFreePanel(), DriverFeature.getDriverManager()));
+
+		FeaturesFeature.addFeatureTest("Count subcommands", new SelectCommandVisitorCounterListener(DriverFeature.getDriverManager()));
+		FeaturesFeature.addFeatureTest("ICompoundCommandVisitorTest", new SelectICompoundCommandVisitorCounterListener());
 
 		application.addTest("Count subcommands", new SelectCommandVisitorCounterListener(DriverFeature.getDriverManager()));
 
 		application.addTest("ICompoundCommandVisitorTest", new SelectICompoundCommandVisitorCounterListener());
 
 		application.addTest("TestImmutableCommandBuilder", new SelectTestImmutableCommandBuilderTest());
+
 	}
 
 	/**
@@ -62,8 +66,6 @@ public class TestJobs2dApp {
 	private static void setupDrivers(Application application) {
 		DriverComposite driverComposite = new DriverComposite();
 		DriverFeature driverFeature = new DriverFeature(application);
-		Job2dDriver loggerDriver = new LoggerDriver();
-		driverFeature.addDriver("Logger driver", loggerDriver);
 
 		DrawPanelController drawerController = DrawerFeature.getDrawerController();
 		Job2dDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
@@ -73,13 +75,9 @@ public class TestJobs2dApp {
 		driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
 		driverFeature.addDriver("Special line Simulator", driver);
 
-		driverComposite.add(new LoggerDriver());
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
 		driverFeature.addDriver("Driver composite", driverComposite);
-
-		driver = new DeviceUsageDecorator(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"), DeviceUsageFeature.getDeviceUsageManager());
-		driverFeature.addDriver("Line Simulator with Device Usage", driver);
 
 	}
 
@@ -127,6 +125,15 @@ public class TestJobs2dApp {
 		application.addComponentMenuElement(Logger.class, "OFF logging", (ActionEvent e) -> logger.setLevel(Level.OFF));
 	}
 
+	private static void setUpExtensions(){
+		Job2dDriver driver = new LoggerDriver();
+		ExtensionFeature.addExtensionDriver("Logger driver", driver);
+
+		Job2dDriver driverDeviceUsage = new DeviceUsageDecorator(DriverFeature.getDriverManager(), DeviceUsageFeature.getDeviceUsageManager());
+		ExtensionFeature.addExtensionDriver("Driver with device usage",driverDeviceUsage);
+	}
+
+
 	/**
 	 * Launch the application.
 	 */
@@ -134,7 +141,6 @@ public class TestJobs2dApp {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				Application app = new Application("Jobs 2D");
-
 				FeatureManager.addFeature(new DrawerFeature(app));
 				FeatureManager.addFeature(new CommandsFeature());
 				FeatureManager.addFeature(new DeviceUsageFeature());
@@ -143,13 +149,14 @@ public class TestJobs2dApp {
 				FeatureManager.addFeature(new CommandHistoryFeature(app));
 				DriverFeature.setUpDriverNameLabelChangeManager();
 				FeatureManager.setupFeatures();
-
+				ExtensionFeature.setUpExtensionFeature(app);
+				FeaturesFeature.setUpFeaturesManager(app);
 				setupDrivers(app);
 				setupPresetTests(app);
 				setupCommandTests(app);
 				setupLogger(app);
 				setupWindows(app);
-
+				setUpExtensions();
 				app.setVisibility(true);
 			}
 		});

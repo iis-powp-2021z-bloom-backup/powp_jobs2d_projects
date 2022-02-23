@@ -2,6 +2,7 @@ package edu.kis.powp.jobs2d.drivers.decorator;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.command.manager.DeviceUsageManager;
+import edu.kis.powp.jobs2d.drivers.DriverManager;
 
 
 public class DeviceUsageDecorator implements Job2dDriver {
@@ -10,8 +11,8 @@ public class DeviceUsageDecorator implements Job2dDriver {
 	private int posX = 0;
 	private int posY = 0;
 
-	public DeviceUsageDecorator(Job2dDriver driver, DeviceUsageManager deviceUsageManager) {
-		this.driver = driver;
+	public DeviceUsageDecorator(DriverManager driverManager, DeviceUsageManager deviceUsageManager) {
+		this.driver = driverManager.getCurrentDriver();
 		this.deviceUsageManager = deviceUsageManager;
 	}
 
