@@ -2,20 +2,32 @@ package edu.kis.powp.jobs2d.command;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 
 public class CompoundCommand implements ICompoundCommand {
 
-    private final String name;
-    private final List<DriverCommand> driverCommands;
+    private String name;
+    private List<DriverCommand> commandsList;
+    private List<DriverCommand> driverCommands;
 
-    public CompoundCommand(List<DriverCommand> commandList, String name) {
+    public CompoundCommand(List<DriverCommand> commands, String name) {
+        super();
+        this.commandsList = new ArrayList<>();
+        commands.iterator().forEachRemaining(command -> this.commandsList.add((DriverCommand) command.clone()));
         this.name = name;
-        this.driverCommands = commandList;
     }
+
+
+    public CompoundCommand(String other, String name) {
+        super();
+        this.name = name;
+        this.commandsList = new ArrayList<>();
+
+    }
+
 
     public List<DriverCommand> getDriverCommands() {
         return driverCommands;
@@ -23,12 +35,29 @@ public class CompoundCommand implements ICompoundCommand {
 
     @Override
     public void execute(Job2dDriver driver) {
-        driverCommands.forEach((c) -> c.execute(driver));
+
+        this.iterator().forEachRemaining(command -> command.execute(driver));
+    }
+
+    public Iterator<DriverCommand> iterator() {
+
+        return commandsList.iterator();
     }
 
     @Override
-    public Iterator<DriverCommand> iterator() {
-        return driverCommands.iterator();
+    public CompoundCommand clone() {
+        CompoundCommand command = null;
+        try {
+            command = (CompoundCommand) super.clone();
+            command.name = this.name;
+            command.commandsList = new ArrayList<>();
+            for (DriverCommand cmd : this.commandsList) {
+                command.commandsList.add((DriverCommand) cmd.clone());
+            }
+        } catch (CloneNotSupportedException e) {
+            command = new CompoundCommand((List<DriverCommand>) this, this.name);
+        }
+        return command;
     }
 
     @Override
@@ -36,11 +65,6 @@ public class CompoundCommand implements ICompoundCommand {
         return name;
     }
 
-    @Override
-    public Object clone() {
-        return new CompoundCommand(driverCommands.stream()
-                .map(x -> (DriverCommand) x.clone())
-                .collect(toList()), this.name);
-    }
-
 }
+
+

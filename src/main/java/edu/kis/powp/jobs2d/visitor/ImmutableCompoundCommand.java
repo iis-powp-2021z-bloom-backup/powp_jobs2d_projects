@@ -21,12 +21,18 @@ public class ImmutableCompoundCommand implements ICompoundCommand {
 
     public ImmutableCompoundCommand(List<DriverCommand> commands, String name) {
         super();
-        this.name = name;
         this.commandsList = new ArrayList<>();
         commands.iterator().forEachRemaining(command -> this.commandsList.add((DriverCommand) command.clone()));
+        this.name = name;
     }
 
-    @Override
+    public ImmutableCompoundCommand(ICompoundCommand other, String name) {
+        super();
+        this.name = name;
+        this.commandsList = new ArrayList<>();
+        other.iterator().forEachRemaining(command -> this.commandsList.add((DriverCommand) command.clone()));
+    }
+
     public ImmutableCompoundCommand clone() {
         ImmutableCompoundCommand command;
         try {
@@ -42,15 +48,8 @@ public class ImmutableCompoundCommand implements ICompoundCommand {
         return command;
     }
 
-    public ImmutableCompoundCommand(ICompoundCommand other, String name) {
-        super();
-        this.name = name;
-        this.commandsList = new ArrayList<>();
-        other.iterator().forEachRemaining(command -> this.commandsList.add((DriverCommand) command.clone()));
-    }
 
     public void execute(Job2dDriver driver) {
         this.iterator().forEachRemaining(command -> execute(driver));
-    }
+    }}
 
-}
