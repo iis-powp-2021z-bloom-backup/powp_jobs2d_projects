@@ -21,7 +21,6 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private List<Subscriber> observerList;
 	private boolean observersDeleted = false;
 	private final CommandManager commandManager;
-	private DriverCommand currentCommand = null;
 	private final JTextArea currentCommandField;
 
 	private String observerListString;

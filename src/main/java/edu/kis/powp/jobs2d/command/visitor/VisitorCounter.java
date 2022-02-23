@@ -11,8 +11,6 @@ public class VisitorCounter implements VisitorCommand
 {
     private int counter = 0;
 
-    double currentX = 0;
-    double currentY = 0;
 
     public int getCounter()
     {
@@ -21,16 +19,11 @@ public class VisitorCounter implements VisitorCommand
 
     @Override
     public void visit(OperateToCommand operateToCommand) {
-        currentX = operateToCommand.getPosX();
-        currentY = operateToCommand.getPosY();
         counter++;
     }
 
     @Override
     public void visit(SetPositionCommand setPositionCommand) {
-
-        currentX = setPositionCommand.getPosX();
-        currentY = setPositionCommand.getPosY();
         counter++;
     }
 
