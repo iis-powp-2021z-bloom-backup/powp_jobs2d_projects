@@ -16,8 +16,7 @@ public class CommandManagerWindowCommandChangeObserver implements Subscriber {
 	}
 
 	@Override
-	public void update() {
-		commandManagerWindow.updateCurrentCommandField();
-	}
+	public void update() {}
+
 
 }

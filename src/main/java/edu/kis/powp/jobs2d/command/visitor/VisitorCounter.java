@@ -11,6 +11,7 @@ public class VisitorCounter implements VisitorCommand
 {
     private int counter = 0;
 
+
     public int getCounter()
     {
         return counter;
