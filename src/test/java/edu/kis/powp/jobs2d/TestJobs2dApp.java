@@ -10,6 +10,7 @@ import edu.kis.legacy.drawer.panel.DrawPanelController;
 import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.*;
+import edu.kis.powp.jobs2d.command.visitor.CheckShapeSelection;
 import edu.kis.powp.jobs2d.drivers.decorator.DeviceUsageDecorator;
 import edu.kis.powp.jobs2d.drivers.SelectMouseFigureOptionListener;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
@@ -30,9 +31,18 @@ public class TestJobs2dApp {
 				DriverFeature.getDriverManager());
 		SelectTestFigure2OptionListener selectTestFigure2OptionListener = new SelectTestFigure2OptionListener(
 				DriverFeature.getDriverManager());
+		SelectTestFigureStar selectTestFigureStar = new SelectTestFigureStar(
+				DriverFeature.getDriverManager());
+		SelectTestFigureTrapeze selectTestFigureTrapeze = new SelectTestFigureTrapeze(
+				DriverFeature.getDriverManager());
+		SelectTestFigureTriangle selectTestFigureTriangle = new SelectTestFigureTriangle(
+				DriverFeature.getDriverManager());
 
 		application.addTest("Figure Joe 1", selectTestFigureOptionListener);
 		application.addTest("Figure Joe 2", selectTestFigure2OptionListener);
+		application.addTest("Figure Squre ShapeTest", selectTestFigureStar);
+		application.addTest("Figure Trapeze ShapeTest", selectTestFigureTrapeze);
+		application.addTest("Figure Triangle ShapeTest", selectTestFigureTriangle);
 	}
 
 	/**
@@ -56,6 +66,31 @@ public class TestJobs2dApp {
 
 		application.addTest("TestImmutableCommandBuilder", new SelectTestImmutableCommandBuilderTest());
 
+		CheckShapeSelection A0 = new CheckShapeSelection(1189,841);
+		CheckShapeSelection A1 = new CheckShapeSelection (841,594);
+		CheckShapeSelection A2 = new CheckShapeSelection (594,420);
+		CheckShapeSelection A3 = new CheckShapeSelection (420,297);
+		CheckShapeSelection A4 = new CheckShapeSelection (297,210);
+		CheckShapeSelection A5 = new CheckShapeSelection (210,148);
+		CheckShapeSelection A6 = new CheckShapeSelection (148,105);
+		CheckShapeSelection A7 = new CheckShapeSelection (105,74);
+		CheckShapeSelection A8 = new CheckShapeSelection (74,52);
+		CheckShapeSelection A9 = new CheckShapeSelection (52,37);
+		CheckShapeSelection A10 = new CheckShapeSelection (37,26);
+
+		application.addTest("Paper Size A0", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),A0));
+		application.addTest("Paper Size A1", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),A1));
+		application.addTest("Paper Size A2", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),A2));
+		application.addTest("Paper Size A3", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),A3));
+		application.addTest("Paper Size A4", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),A4));
+		application.addTest("Paper Size A5", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),A5));
+		application.addTest("Paper Size A6", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),A6));
+		application.addTest("Paper Size A7", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),A7));
+		application.addTest("Paper Size A8", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),A8));
+		application.addTest("Paper Size A9", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),A9));
+		application.addTest("Paper Size A10", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),A10));
+
+
 	}
 
 	/**
@@ -78,6 +113,8 @@ public class TestJobs2dApp {
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
 		driverFeature.addDriver("Driver composite", driverComposite);
+
+
 
 	}
 
