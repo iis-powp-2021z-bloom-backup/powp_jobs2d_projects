@@ -64,7 +64,6 @@ public class TestJobs2dApp {
 
 		application.addTest("ICompoundCommandVisitorTest", new SelectICompoundCommandVisitorCounterListener());
 
-		application.addTest("TestImmutableCommandBuilder", new SelectTestImmutableCommandBuilderTest());
 
 		CheckShapeSelection A0 = new CheckShapeSelection(1189,841);
 		CheckShapeSelection A1 = new CheckShapeSelection (841,594);

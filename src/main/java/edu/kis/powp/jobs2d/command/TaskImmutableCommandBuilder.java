@@ -24,9 +24,6 @@ public class TaskImmutableCommandBuilder {
         return this;
     }
 
-    public CompoundCommand build() {
 
-        return new CompoundCommand(name, commandsList);
-    }
 }
 
