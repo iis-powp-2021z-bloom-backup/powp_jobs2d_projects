@@ -9,24 +9,25 @@ import java.util.Iterator;
 
 public class VisitorExceedingCanvas implements VisitorCommand {
 
-    CheckShapeSelection checkShapeSelection;
+    private checkPaperSize checkPaperSize;
     boolean goingBeyondDimension = false;
 
-    public VisitorExceedingCanvas(CheckShapeSelection checkShapeSelection) {
-        this.checkShapeSelection = checkShapeSelection;
+    public VisitorExceedingCanvas(checkPaperSize checkPaperSize) {
+        this.checkPaperSize = checkPaperSize;
 
     }
     public void visit(SetPositionCommand setPositionCommand) {
-        if (checkShapeSelection.checkPaperSize(setPositionCommand.getPosX(), setPositionCommand.getPosY())) {
+        if (checkPaperSize.checkSize(setPositionCommand.getPosX(), setPositionCommand.getPosY())) {
             goingBeyondDimension = true;
         }
     }
 
     public void visit(OperateToCommand operateToCommand) {
-        if ( checkShapeSelection.checkPaperSize(operateToCommand.getPosX(), operateToCommand.getPosY())) {
+        if ( checkPaperSize.checkSize(operateToCommand.getPosX(), operateToCommand.getPosY())) {
             goingBeyondDimension = true;
         }
     }
+
 
     public void visit(ICompoundCommand compoundCommand) {
         Iterator<DriverCommand> iterator = compoundCommand.iterator();
@@ -39,4 +40,5 @@ public class VisitorExceedingCanvas implements VisitorCommand {
     public boolean getResult() {
         return goingBeyondDimension;
     }
+
 }
