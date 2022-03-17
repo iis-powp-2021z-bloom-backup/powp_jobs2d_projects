@@ -2,6 +2,7 @@ package edu.kis.powp.jobs2d;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,6 +10,8 @@ import edu.kis.legacy.drawer.panel.DrawPanelController;
 import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.*;
+import edu.kis.powp.jobs2d.command.visitor.CheckShapeSelection;
+import edu.kis.powp.jobs2d.command.visitor.factorySelectSizeCanvas;
 import edu.kis.powp.jobs2d.drivers.decorator.DeviceUsageDecorator;
 import edu.kis.powp.jobs2d.drivers.SelectMouseFigureOptionListener;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
@@ -29,9 +32,18 @@ public class TestJobs2dApp {
 				DriverFeature.getDriverManager());
 		SelectTestFigure2OptionListener selectTestFigure2OptionListener = new SelectTestFigure2OptionListener(
 				DriverFeature.getDriverManager());
+		SelectTestFigureStar selectTestFigureStar = new SelectTestFigureStar(
+				DriverFeature.getDriverManager());
+		SelectTestFigureTrapeze selectTestFigureTrapeze = new SelectTestFigureTrapeze(
+				DriverFeature.getDriverManager());
+		SelectTestFigureTriangle selectTestFigureTriangle = new SelectTestFigureTriangle(
+				DriverFeature.getDriverManager());
 
 		application.addTest("Figure Joe 1", selectTestFigureOptionListener);
 		application.addTest("Figure Joe 2", selectTestFigure2OptionListener);
+		application.addTest("Figure Square ShapeTest", selectTestFigureStar);
+		application.addTest("Figure Trapeze ShapeTest", selectTestFigureTrapeze);
+		application.addTest("Figure Triangle ShapeTest", selectTestFigureTriangle);
 	}
 
 	/**
@@ -48,6 +60,27 @@ public class TestJobs2dApp {
 
 		FeaturesFeature.addFeatureTest("Count subcommands", new SelectCommandVisitorCounterListener(DriverFeature.getDriverManager()));
 		FeaturesFeature.addFeatureTest("ICompoundCommandVisitorTest", new SelectICompoundCommandVisitorCounterListener());
+
+		application.addTest("Count subcommands", new SelectCommandVisitorCounterListener(DriverFeature.getDriverManager()));
+
+		application.addTest("ICompoundCommandVisitorTest", new SelectICompoundCommandVisitorCounterListener());
+
+
+		factorySelectSizeCanvas factorySelectSizeCanvas = new factorySelectSizeCanvas();
+
+		application.addTest("Paper Size A0", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),new CheckShapeSelection(factorySelectSizeCanvas.getSize("A0"))));
+		application.addTest("Paper Size A1", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),new CheckShapeSelection(factorySelectSizeCanvas.getSize("A1"))));
+		application.addTest("Paper Size A2", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),new CheckShapeSelection(factorySelectSizeCanvas.getSize("A2"))));
+		application.addTest("Paper Size A3", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),new CheckShapeSelection(factorySelectSizeCanvas.getSize("A3"))));
+		application.addTest("Paper Size A4", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),new CheckShapeSelection(factorySelectSizeCanvas.getSize("A4"))));
+		application.addTest("Paper Size A5", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),new CheckShapeSelection(factorySelectSizeCanvas.getSize("A5"))));
+		application.addTest("Paper Size A6", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),new CheckShapeSelection(factorySelectSizeCanvas.getSize("A6"))));
+		application.addTest("Paper Size A7", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),new CheckShapeSelection(factorySelectSizeCanvas.getSize("A7"))));
+		application.addTest("Paper Size A8", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),new CheckShapeSelection(factorySelectSizeCanvas.getSize("A8"))));
+		application.addTest("Paper Size A9", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),new CheckShapeSelection(factorySelectSizeCanvas.getSize("A9"))));
+		application.addTest("Paper Size A10", new SelectSizeOfActionMonitor(DriverFeature.getDriverManager(),new CheckShapeSelection(factorySelectSizeCanvas.getSize("A10"))));
+
+
 
 	}
 
@@ -71,6 +104,8 @@ public class TestJobs2dApp {
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
 		driverComposite.add(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
 		driverFeature.addDriver("Driver composite", driverComposite);
+
+
 
 	}
 
