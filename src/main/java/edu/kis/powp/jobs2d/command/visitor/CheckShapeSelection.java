@@ -1,20 +1,22 @@
 package edu.kis.powp.jobs2d.command.visitor;
 
-public class CheckShapeSelection {
+public class CheckShapeSelection implements checkPaperSize {
 
     private int bonduaryPositiveX;
     private int bonduaryNegativeX;
     private int bonduaryPositiveY;
     private int bonduaryNegativeY;
 
-    public CheckShapeSelection(int height, int width){
-        this.bonduaryPositiveX=width/2;
-        this.bonduaryPositiveY=height/2;
-        this.bonduaryNegativeX=(-1)*(width/2);
-        this.bonduaryNegativeY=(-1)*(height/2);
+    public CheckShapeSelection( Size a){
+        this.bonduaryPositiveX=a.getWidth()/2;
+        this.bonduaryPositiveY=a.getHeight()/2;
+        this.bonduaryNegativeX=(-1)*(a.getWidth()/2);
+        this.bonduaryNegativeY=(-1)*(a.getHeight()/2);
     }
 
-    public boolean checkPaperSize(int x, int y) {
+
+    @Override
+    public boolean checkSize(int x, int y) {
         if((x>bonduaryPositiveX)||(x<bonduaryNegativeX)){
             return true;
         }
